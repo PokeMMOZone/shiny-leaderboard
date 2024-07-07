@@ -67,6 +67,7 @@ foreach ($pTags as $pTag) {
         if (!in_array($potentialUsername, $usernameExclusionList)) {
             if (isset($usernameLookupList[$potentialUsername])) {
                 if ($lastValidUsername != "") {
+                    // Do nothing, special case handled
                 }
             } else {
                 $currentUsername = $potentialUsername;
@@ -115,6 +116,37 @@ foreach ($users as $username => $data) {
         unset($users[$username]);
     }
 }
+
+// Calculate total shinies
+$totalShinies = array_sum(array_column($users, 'imageCount'));
+
+// Prepare data for JSON file
+$jsonData = [
+    "name" => "LËGEND",
+    "code" => "LGÑD",
+    "url" => $url,
+    "totalshinies" => $totalShinies,
+    "members" => []
+];
+
+foreach ($users as $username => $data) {
+    $jsonData["members"][] = [
+        "username" => $username,
+        "count" => $data['imageCount']
+    ];
+}
+
+// Create directory if it doesn't exist
+$dir = __DIR__ . '/../teams';
+if (!is_dir($dir)) {
+    if (!mkdir($dir, 0777, true)) {
+        die("Failed to create directories...");
+    }
+}
+
+// Write data to JSON file
+$file = "$dir/lgnd.json";
+file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
 // Display the results
 echo "<h1>Team LGNDS OT Shiny Board</h1>";
