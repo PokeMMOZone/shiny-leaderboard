@@ -24,7 +24,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #ffffff;
+    color: #ffffff; /* Changed to a brighter color for better contrast */
     text-decoration: none;
     font-weight: bold;
 }
@@ -41,7 +41,7 @@ nav ul li a:hover {
 
 h1 {
     text-align: center;
-    color: #00bcd4;
+    color: #ffffff; /* Changed to a brighter color for better contrast */
 }
 
 table {
@@ -76,4 +76,14 @@ footer {
     width: 100%;
     bottom: 0;
     left: 0;
+}
+
+/* Additional styles for the leaderboard links */
+table td a {
+    color: #bb86fc; /* Brighter color for links in the table */
+    text-decoration: none;
+}
+
+table td a:hover {
+    text-decoration: underline;
 }
