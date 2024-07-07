@@ -89,7 +89,7 @@ foreach ($pTags as $pTag) {
     // If there's a last valid username, look for images and multipliers in the current <p> tag
     if ($lastValidUsername != "") {
         $images = $xpath->query(".//img", $pTag);
-        $textNodes = $xpath->query(".//span/strong | .//span/b | .//span/font", $pTag);
+        $textNodes = $xpath->query(".//span/strong | .//span/b | .//span/font | .//strong | .//b | .//font", $pTag);
 
         // Get all image URLs
         foreach ($images as $image) {
@@ -102,12 +102,12 @@ foreach ($pTags as $pTag) {
         }
 
         // Check for special cases in text nodes
-        $textContent = $pTag->textContent;
-        foreach ($usernameLookupList as $key => $value) {
-            if (strpos($textContent, $key) !== false) {
-                $users[$lastValidUsername]['imageCount'] += $value;
+        foreach ($textNodes as $textNode) {
+            $textContent = $textNode->textContent;
+            if (isset($usernameLookupList[$textContent])) {
+                $users[$lastValidUsername]['imageCount'] += $usernameLookupList[$textContent];
                 // Debugging output
-                echo "<p>Debug: {$key} detected for {$lastValidUsername}, adding {$value} to count.</p>";
+                echo "<p>Debug: {$textContent} detected for {$lastValidUsername}, adding {$usernameLookupList[$textContent]} to count.</p>";
             }
         }
     }
