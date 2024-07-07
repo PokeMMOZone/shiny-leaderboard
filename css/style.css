@@ -87,3 +87,13 @@ table td a {
 table td a:hover {
     text-decoration: underline;
 }
+
+/* Applying the same color to regular links */
+a {
+    color: #bb86fc; /* Brighter color for links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
