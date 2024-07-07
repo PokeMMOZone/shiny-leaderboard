@@ -67,3 +67,13 @@ table tr:nth-child(even) {
 table tr:hover {
     background-color: #3e3e3e;
 }
+
+footer {
+    text-align: center;
+    padding: 1em 0;
+    background-color: #1f1f1f;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
