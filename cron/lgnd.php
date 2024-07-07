@@ -45,7 +45,11 @@ $imageUrlExclusionList = [
 $usernameLookupList = [
     "x2" => 1,
     "x3" => 2,
-    "x4" => 3
+    "x4" => 3,
+    "x5" => 4,
+    "x6" => 5,
+    "x7" => 6,
+    "x8" => 7,
 ];
 
 $users = [];
@@ -56,7 +60,7 @@ $lastValidUsername = "";
 // Loop through each <p> tag
 foreach ($pTags as $pTag) {
     // Check if the <p> tag contains a username
-    $usernameNode = $xpath->query(".//span/strong", $pTag);
+    $usernameNode = $xpath->query(".//span/strong | .//span/b | .//span/font", $pTag);
     if ($usernameNode->length > 0) {
         $potentialUsername = $usernameNode->item(0)->textContent;
         
@@ -85,7 +89,7 @@ foreach ($pTags as $pTag) {
     // If there's a last valid username, look for images and multipliers in the current <p> tag
     if ($lastValidUsername != "") {
         $images = $xpath->query(".//img", $pTag);
-        $textNodes = $xpath->query(".//span/strong", $pTag);
+        $textNodes = $xpath->query(".//span/strong | .//span/b | .//span/font", $pTag);
 
         // Get all image URLs
         foreach ($images as $image) {
