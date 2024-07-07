@@ -72,7 +72,7 @@ footer {
     text-align: center;
     padding: 1em 0;
     background-color: #1f1f1f;
-    position: fixed;
+    position: relative; /* Changed from fixed to relative */
     width: 100%;
     bottom: 0;
     left: 0;
