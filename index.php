@@ -25,6 +25,7 @@ $sortedTeams = sortTeamsByShinies($teams);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PokeMMO Shiny OT Team Leaderboard</title>
+    <link rel="icon" type="image/png" href="icon.png">
     <?php include 'styles-scripts.php'; ?>
 </head>
 <body>
