@@ -67,8 +67,6 @@ foreach ($pTags as $pTag) {
         if (!in_array($potentialUsername, $usernameExclusionList)) {
             if (isset($usernameLookupList[$potentialUsername])) {
                 if ($lastValidUsername != "") {
-                    // Debugging output, no addition performed
-                    echo "<p>Debug: {$potentialUsername} detected for {$lastValidUsername}, no addition performed.</p>";
                 }
             } else {
                 $currentUsername = $potentialUsername;
@@ -106,8 +104,6 @@ foreach ($pTags as $pTag) {
             $textContent = $textNode->textContent;
             if (isset($usernameLookupList[$textContent])) {
                 $users[$lastValidUsername]['imageCount'] += $usernameLookupList[$textContent];
-                // Debugging output
-                echo "<p>Debug: {$textContent} detected for {$lastValidUsername}, adding {$usernameLookupList[$textContent]} to count.</p>";
             }
         }
     }
@@ -130,13 +126,6 @@ foreach ($users as $username => $data) {
         echo "<li>$url</li>";
     }
     echo "</ul></li>";
-}
-echo "</ul>";
-
-echo "<h2>All Image URLs (for debugging)</h2>";
-echo "<ul>";
-foreach ($imageUrls as $url) {
-    echo "<li>$url</li>";
 }
 echo "</ul>";
 ?>
