@@ -24,13 +24,13 @@ $sortedTeams = sortTeamsByShinies($teams);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeMMO Shiny Leaderboard</title>
+    <title>PokeMMO Shiny OT Team Leaderboard</title>
     <?php include 'styles-scripts.php'; ?>
 </head>
 <body>
     <?php include 'nav.php'; ?>
     <div class="container">
-        <h1>PokeMMO Shiny Leaderboard</h1>
+        <h1>PokeMMO Shiny OT Team Leaderboard</h1>
         <table>
             <thead>
                 <tr>
