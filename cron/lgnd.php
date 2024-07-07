@@ -102,12 +102,12 @@ foreach ($pTags as $pTag) {
         }
 
         // Check for special cases in text nodes
-        foreach ($textNodes as $textNode) {
-            $textContent = $textNode->textContent;
-            if (isset($usernameLookupList[$textContent])) {
-                $users[$lastValidUsername]['imageCount'] += $usernameLookupList[$textContent];
+        $textContent = $pTag->textContent;
+        foreach ($usernameLookupList as $key => $value) {
+            if (strpos($textContent, $key) !== false) {
+                $users[$lastValidUsername]['imageCount'] += $value;
                 // Debugging output
-                echo "<p>Debug: {$textContent} detected for {$lastValidUsername}, adding {$usernameLookupList[$textContent]} to count.</p>";
+                echo "<p>Debug: {$key} detected for {$lastValidUsername}, adding {$value} to count.</p>";
             }
         }
     }
