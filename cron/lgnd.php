@@ -60,18 +60,21 @@ foreach ($pTags as $pTag) {
     if ($usernameNode->length > 0) {
         $potentialUsername = $usernameNode->item(0)->textContent;
         
-        if (isset($usernameLookupList[$potentialUsername])) {
-            if ($lastValidUsername != "") {
-                $users[$lastValidUsername]['imageCount'] += $usernameLookupList[$potentialUsername];
-            }
-        } elseif (!in_array($potentialUsername, $usernameExclusionList)) {
-            $currentUsername = $potentialUsername;
-            $lastValidUsername = $currentUsername;
-            if (!isset($users[$currentUsername])) {
-                $users[$currentUsername] = [
-                    'imageCount' => 0,
-                    'images' => []
-                ];
+        if (!in_array($potentialUsername, $usernameExclusionList)) {
+            if (isset($usernameLookupList[$potentialUsername])) {
+                if ($lastValidUsername != "") {
+                    // Debugging output, no addition performed
+                    echo "<p>Debug: {$potentialUsername} detected for {$lastValidUsername}, no addition performed.</p>";
+                }
+            } else {
+                $currentUsername = $potentialUsername;
+                $lastValidUsername = $currentUsername;
+                if (!isset($users[$currentUsername])) {
+                    $users[$currentUsername] = [
+                        'imageCount' => 0,
+                        'images' => []
+                    ];
+                }
             }
         } else {
             // Do not reset current username if it's in the exclusion list
@@ -79,9 +82,10 @@ foreach ($pTags as $pTag) {
         }
     }
 
-    // If there's a last valid username, look for images in the current <p> tag
-    if ($lastValidUsername != "" && $currentUsername != "") {
+    // If there's a last valid username, look for images and multipliers in the current <p> tag
+    if ($lastValidUsername != "") {
         $images = $xpath->query(".//img", $pTag);
+        $textNodes = $xpath->query(".//span/strong", $pTag);
 
         // Get all image URLs
         foreach ($images as $image) {
@@ -90,6 +94,16 @@ foreach ($pTags as $pTag) {
                 $imageUrls[] = $imgUrl;
                 $users[$lastValidUsername]['images'][] = $imgUrl;
                 $users[$lastValidUsername]['imageCount']++;
+            }
+        }
+
+        // Check for special cases in text nodes
+        foreach ($textNodes as $textNode) {
+            $textContent = $textNode->textContent;
+            if (isset($usernameLookupList[$textContent])) {
+                $users[$lastValidUsername]['imageCount'] += $usernameLookupList[$textContent];
+                // Debugging output
+                echo "<p>Debug: {$textContent} detected for {$lastValidUsername}, adding {$usernameLookupList[$textContent]} to count.</p>";
             }
         }
     }
