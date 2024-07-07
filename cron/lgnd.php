@@ -67,18 +67,20 @@ foreach ($pTags as $pTag) {
         } elseif (!in_array($potentialUsername, $usernameExclusionList)) {
             $currentUsername = $potentialUsername;
             $lastValidUsername = $currentUsername;
-            $users[$currentUsername] = [
-                'imageCount' => 0,
-                'images' => []
-            ];
+            if (!isset($users[$currentUsername])) {
+                $users[$currentUsername] = [
+                    'imageCount' => 0,
+                    'images' => []
+                ];
+            }
         } else {
             // Do not reset current username if it's in the exclusion list
-            $currentUsername = $lastValidUsername;
+            $currentUsername = "";
         }
     }
 
-    // If there's a current username, look for images in the current <p> tag
-    if ($currentUsername != "") {
+    // If there's a last valid username, look for images in the current <p> tag
+    if ($lastValidUsername != "" && $currentUsername != "") {
         $images = $xpath->query(".//img", $pTag);
 
         // Get all image URLs
@@ -86,10 +88,17 @@ foreach ($pTags as $pTag) {
             $imgUrl = $image->getAttribute("src");
             if (!in_array($imgUrl, $imageUrlExclusionList)) {
                 $imageUrls[] = $imgUrl;
-                $users[$currentUsername]['images'][] = $imgUrl;
-                $users[$currentUsername]['imageCount']++;
+                $users[$lastValidUsername]['images'][] = $imgUrl;
+                $users[$lastValidUsername]['imageCount']++;
             }
         }
+    }
+}
+
+// Remove users with no images
+foreach ($users as $username => $data) {
+    if ($data['imageCount'] == 0) {
+        unset($users[$username]);
     }
 }
 
