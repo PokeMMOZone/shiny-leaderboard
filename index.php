@@ -28,12 +28,7 @@ $sortedTeams = sortTeamsByShinies($teams);
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="index.php">Home</a></li>
-            <!-- Add more pages as needed -->
-        </ul>
-    </nav>
+    <?php include 'nav.php'; ?>
     <div class="container">
         <h1>PokeMMO Shiny Leaderboard</h1>
         <table>
@@ -55,5 +50,6 @@ $sortedTeams = sortTeamsByShinies($teams);
             </tbody>
         </table>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
