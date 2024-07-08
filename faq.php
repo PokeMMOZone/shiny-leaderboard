@@ -37,7 +37,7 @@
         </div>
         <div class="faq-item">
             <h2>How can I get support or onboard a team?</h2>
-            <p>For support or to onboard a team, you can create a support ticket on the PokeMMO Zone discord (<a href="http://discord.pokemmo.zone/" target="_blank">http://discord.pokemmo.zone/</a>) or submit pull requests to our repository at <a href="https://github.com/PokeMMOZone/shiny-leaderboard" target="_blank">https://github.com/PokeMMOZone/shiny-leaderboard</a>. To make it easier to add your team, we recommend using the format "username (shuny count)" on your team's showcase.</p>
+            <p>For support or to onboard a team, you can create a support ticket on the <a href="http://discord.pokemmo.zone/" target="_blank">PokeMMO Zone discord</a> or submit pull requests to <a href="https://github.com/PokeMMOZone/shiny-leaderboard" target="_blank">our repository</a>. To make it easier to add your team, we recommend using the format "username (shiny count)" on your team's showcase.</p>
         </div>
     </div>
     <?php include 'footer.php'; ?>
