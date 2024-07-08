@@ -18,6 +18,21 @@ function sortTeamsByShinies($teams) {
 
 $teams = getTeamsData('teams');
 $sortedTeams = sortTeamsByShinies($teams);
+
+// Initialize ranking and handle ties
+$rankedTeams = [];
+$rank = 1;
+$prevShinies = null;
+foreach ($sortedTeams as $index => $team) {
+    if ($prevShinies !== null && $team['totalshinies'] < $prevShinies) {
+        $rank = $index + 1;
+    }
+    $team['rank'] = $rank;
+    $rankedTeams[] = $team;
+    $prevShinies = $team['totalshinies'];
+}
+
+$totalTeams = count($teams);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +47,7 @@ $sortedTeams = sortTeamsByShinies($teams);
     <?php include 'nav.php'; ?>
     <div class="container">
         <h1>PokeMMO Shiny OT Team Leaderboard</h1>
+        <p>Total number of teams: <?php echo $totalTeams; ?></p>
         <table>
             <thead>
                 <tr>
@@ -41,9 +57,9 @@ $sortedTeams = sortTeamsByShinies($teams);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($sortedTeams as $index => $team) : ?>
+                <?php foreach ($rankedTeams as $team) : ?>
                     <tr>
-                        <td><?php echo $index + 1; ?></td>
+                        <td><?php echo $team['rank']; ?></td>
                         <td><a href="<?php echo htmlspecialchars($team['url']); ?>" target="_blank"><?php echo htmlspecialchars($team['name']); ?></a></td>
                         <td><?php echo $team['totalshinies']; ?></td>
                     </tr>

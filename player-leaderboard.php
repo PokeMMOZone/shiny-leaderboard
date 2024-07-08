@@ -14,6 +14,21 @@ function sortUsersByCount($users) {
 
 $users = getUsersData('users/users.json');
 $sortedUsers = sortUsersByCount($users);
+
+// Initialize ranking and handle ties
+$rankedUsers = [];
+$rank = 1;
+$prevCount = null;
+foreach ($sortedUsers as $index => $user) {
+    if ($prevCount !== null && $user['count'] < $prevCount) {
+        $rank = $index + 1;
+    }
+    $user['rank'] = $rank;
+    $rankedUsers[] = $user;
+    $prevCount = $user['count'];
+}
+
+$totalUsers = count($users);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +43,7 @@ $sortedUsers = sortUsersByCount($users);
     <?php include 'nav.php'; ?>
     <div class="container">
         <h1>PokeMMO Player OT Shiny Leaderboard</h1>
+        <p>Total number of players: <?php echo $totalUsers; ?></p>
         <table>
             <thead>
                 <tr>
@@ -38,9 +54,9 @@ $sortedUsers = sortUsersByCount($users);
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($sortedUsers as $index => $user) : ?>
+                <?php foreach ($rankedUsers as $user) : ?>
                     <tr>
-                        <td><?php echo $index + 1; ?></td>
+                        <td><?php echo $user['rank']; ?></td>
                         <td><?php echo htmlspecialchars($user['username']); ?></td>
                         <td><?php echo $user['count']; ?></td>
                         <td><a href="<?php echo htmlspecialchars($user['team']['url']); ?>" target="_blank"><?php echo htmlspecialchars($user['team']['name']); ?></a></td>
