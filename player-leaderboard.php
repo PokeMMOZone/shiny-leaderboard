@@ -44,7 +44,7 @@ $totalUsers = count($users);
     <div class="container">
         <h1>PokeMMO Player OT Shiny Leaderboard</h1>
         <p>Total number of players: <?php echo $totalUsers; ?></p>
-        <table>
+        <table id="userLeaderboard" class="display">
             <thead>
                 <tr>
                     <th>Rank</th>

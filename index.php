@@ -48,7 +48,7 @@ $totalTeams = count($teams);
     <div class="container">
         <h1>PokeMMO Shiny OT Team Leaderboard</h1>
         <p>Total number of teams: <?php echo $totalTeams; ?></p>
-        <table>
+        <table id="leaderboard" class="display">
             <thead>
                 <tr>
                     <th>Rank</th>

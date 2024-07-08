@@ -24,7 +24,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #ffffff; /* Changed to a brighter color for better contrast */
+    color: #ffffff;
     text-decoration: none;
     font-weight: bold;
 }
@@ -41,54 +41,70 @@ nav ul li a:hover {
 
 h1 {
     text-align: center;
-    color: #ffffff; /* Changed to a brighter color for better contrast */
+    color: #ffffff;
 }
 
-table {
-    width: 100%;
+table#leaderboard,
+table#leaderboard th,
+table#leaderboard td,
+table#userLeaderboard,
+table#userLeaderboard th,
+table#userLeaderboard td {
     border-collapse: collapse;
-    margin: 2em 0;
+    background-color: #1f1f1f; /* Dark background for the whole table */
+    color: #ffffff; /* Light text */
+    overflow-x: auto; /* Enables horizontal scrolling */
 }
 
-table th, table td {
-    border: 1px solid #424242;
-    padding: 0.5em;
+table#leaderboard th,
+table#leaderboard td,
+table#userLeaderboard th,
+table#userLeaderboard td {
+    border: 1px solid #424242; /* Border color around cells */
+    padding: 8px;
     text-align: left;
+    color: #ffffff; /* Light text */
+    background-color: #2e2e2e; /* Darker cell background */
+    min-width: 80px; /* Sets a minimum width for each cell */
 }
 
-table th {
-    background-color: #1f1f1f;
+table#leaderboard th,
+table#userLeaderboard th {
+    background-color: #424242; /* Header background color */
+    color: #ffffff; /* Light text */
 }
 
-table tr:nth-child(even) {
-    background-color: #2e2e2e;
+table#leaderboard tr:nth-child(even),
+table#userLeaderboard tr:nth-child(even) {
+    background-color: #2e2e2e; /* Alternate row background */
 }
 
-table tr:hover {
-    background-color: #3e3e3e;
+table#leaderboard tr:hover,
+table#userLeaderboard tr:hover {
+    background-color: #3e3e3e; /* Highlighted row background on hover */
 }
 
 footer {
     text-align: center;
     padding: 1em 0;
     background-color: #1f1f1f;
-    position: relative; /* Changed from fixed to relative */
+    position: relative;
     width: 100%;
     bottom: 0;
     left: 0;
 }
 
-/* Additional styles for the leaderboard links */
-table td a {
+table#leaderboard td a,
+table#userLeaderboard td a {
     color: #bb86fc; /* Brighter color for links in the table */
     text-decoration: none;
 }
 
-table td a:hover {
+table#leaderboard td a:hover,
+table#userLeaderboard td a:hover {
     text-decoration: underline;
 }
 
-/* Applying the same color to regular links */
 a {
     color: #bb86fc; /* Brighter color for links */
     text-decoration: none;
@@ -96,4 +112,13 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    table#leaderboard,
+    table#userLeaderboard {
+        width: 100%;
+        overflow-x: auto; /* Enable horizontal scrolling */
+        display: block;
+    }
 }
