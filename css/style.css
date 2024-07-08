@@ -122,3 +122,20 @@ a:hover {
         display: block;
     }
 }
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+    color: #ffffff !important;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent;
+    margin-left: 3px;
+    color: #ffffff; /* Light text color */
+}
+
+.dataTables_wrapper .dataTables_filter input::placeholder {
+    color: #bbbbbb; /* Lighter gray for placeholder text */
+}

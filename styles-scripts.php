@@ -4,12 +4,16 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#leaderboard, #userLeaderboard').DataTable({
-            "paging": true,
+            "paging": false,
+            "responsive": true,
             "searching": true,
             "info": true,
-            "order": [[ 2, "desc" ]],
+            "language": {
+                "info": "Displaying _TOTAL_ entries",
+            },
+            "order": [[2, "desc"]],
             "autoWidth": false
         });
     });
