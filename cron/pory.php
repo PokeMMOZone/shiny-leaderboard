@@ -1,5 +1,6 @@
 <?php
 // URL of the page to scrape
+// $url = "https://forums.pokemmo.com/index.php?/topic/179197-testing-ignore/";  // For testing
 $url = "https://forums.pokemmo.com/index.php?/topic/159659-pory-ot-shiny-showcase/";
 
 // Initialize cURL session
@@ -30,27 +31,49 @@ libxml_clear_errors();
 $xpath = new DOMXPath($dom);
 
 // Find all div and p tags
-$tags = $xpath->query("//div | //p");
+$possibleUsernameSpans = $xpath->query("//span[@style='font-size:16px;']");
+$shinyCountSpans = $xpath->query("//span[@style='color:#ffffff;']");
 
 // Initialize arrays
 $users = [];
 
 // Regular expression pattern to match usernames and counts
-$usernamePattern = '/([a-zA-Z0-9]+)\s*\((\d+)\)/';
+$usernamePattern = '>([a-zA-Z]+)<>';
+$shinyCountPattern = '/<span style="color:#ffffff;">(\d+)<\/span>/';
 
-// Loop through each tag
-foreach ($tags as $tag) {
-    $tagContent = $dom->saveHTML($tag);
-    
+$usernameSpans = [];
+
+// Loop through each tag to extract only usernames
+foreach ($possibleUsernameSpans as $possibleUsernameSpan) {
+    $usernameContent = $dom->saveHTML($possibleUsernameSpan);
     // Check if the tag contains a username
-    if (preg_match($usernamePattern, $tagContent, $usernameMatches)) {
+    if (preg_match($usernamePattern, $usernameContent, $usernameMatches)) {
         $username = trim($usernameMatches[1]);
-        $imageCount = intval($usernameMatches[2]);
-        
+        // Add it to th array
+        $usernameSpans[] = $possibleUsernameSpan;
+    }
+}
+
+for($i = 0; $i < count($usernameSpans); $i++) {
+    $usernameContent = $dom->saveHTML($usernameSpans[$i]);
+    if (preg_match($usernamePattern, $usernameContent, $usernameMatches)) {
+        $username = trim($usernameMatches[1]);
+        debug_to_console($username);
+        $imageCount = 0;
+        if($shinyCountSpans[$i] != null){
+            $shinyCountContent = $dom->saveHTML($shinyCountSpans[$i]);
+            if (preg_match($shinyCountPattern, $shinyCountContent, $shinyCountMatches)) {
+                $imageCount = intval($shinyCountMatches[1]);
+            }
+        }
+        debug_to_console($imageCount);
         if (!isset($users[$username])) {
             $users[$username] = [
                 'imageCount' => $imageCount
             ];
+        } else {
+            // If user already exists, add the count (in case of multiple entries)
+            $users[$username]['imageCount'] += $imageCount;
         }
     }
 }
@@ -76,10 +99,8 @@ foreach ($users as $username => $data) {
 
 // Create directory if it doesn't exist
 $dir = __DIR__ . '/../teams';
-if (!is_dir($dir)) {
-    if (!mkdir($dir, 0777, true)) {
-        die("Failed to create directories...");
-    }
+if (!is_dir($dir) && !mkdir($dir, 0777, true)) {
+    die("Failed to create directories...");
 }
 
 // Write data to JSON file
