@@ -36,6 +36,10 @@
             <p>The shiny counts are updated on a daily basis from publicly available information on PokeMMO. Teams often have a shiny showcase, and the data is scraped from there.</p>
         </div>
         <div class="faq-item">
+            <h2>Can the ranking be done by other metrics, like rares for example?</h2>
+            <p>Going off number of shinies is the quickest and easiest way to make a leaderboard. Due to the number of different formats of team showcases it is difficult to determine species of shiny Pokemon. Eventually, a better site will be made with much more leaderboards and rankings but people will need to register and update their shinies on the website. This will take time to develop.</p>
+        </div>
+        <div class="faq-item">
             <h2>How can I get support or onboard a team?</h2>
             <p>For support or to onboard a team, you can create a support ticket on the <a href="http://discord.pokemmo.zone/" target="_blank">PokeMMO Zone discord</a> or submit pull requests to <a href="https://github.com/PokeMMOZone/shiny-leaderboard" target="_blank">our repository</a>. To make it easier to add your team, we recommend using the format "username (shiny count)" on your team's showcase.</p>
         </div>
