@@ -58,7 +58,6 @@ for($i = 0; $i < count($usernameSpans); $i++) {
     $usernameContent = $dom->saveHTML($usernameSpans[$i]);
     if (preg_match($usernamePattern, $usernameContent, $usernameMatches)) {
         $username = trim($usernameMatches[1]);
-        debug_to_console($username);
         $imageCount = 0;
         if($shinyCountSpans[$i] != null){
             $shinyCountContent = $dom->saveHTML($shinyCountSpans[$i]);
@@ -66,7 +65,6 @@ for($i = 0; $i < count($usernameSpans); $i++) {
                 $imageCount = intval($shinyCountMatches[1]);
             }
         }
-        debug_to_console($imageCount);
         if (!isset($users[$username])) {
             $users[$username] = [
                 'imageCount' => $imageCount
