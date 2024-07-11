@@ -54,24 +54,25 @@ foreach ($possibleUsernameSpans as $possibleUsernameSpan) {
     }
 }
 
-for($i = 0; $i < count($usernameSpans); $i++) {
-    $usernameContent = $dom->saveHTML($usernameSpans[$i]);
-    if (preg_match($usernamePattern, $usernameContent, $usernameMatches)) {
-        $username = trim($usernameMatches[1]);
-        $imageCount = 0;
-        if($shinyCountSpans[$i] != null){
-            $shinyCountContent = $dom->saveHTML($shinyCountSpans[$i]);
-            if (preg_match($shinyCountPattern, $shinyCountContent, $shinyCountMatches)) {
-                $imageCount = intval($shinyCountMatches[1]);
-            }
-        }
-        if (!isset($users[$username])) {
-            $users[$username] = [
-                'imageCount' => $imageCount
+// Track usernames and their Pokémon counts
+foreach ($dom->getElementsByTagName('*') as $node) {
+    // Check for username span
+    if ($node->nodeName == 'span' && $node->getAttribute('style') == 'font-size:16px;') {
+        if (preg_match('/>([a-zA-Z]+)</', $dom->saveHTML($node), $usernameMatches)) {
+            $currentUser = trim($usernameMatches[1]);
+            $users[$currentUser] = [
+                'imageCount' => 0,
+                'pokemons' => []
             ];
-        } else {
-            // If user already exists, add the count (in case of multiple entries)
-            $users[$username]['imageCount'] += $imageCount;
+        }
+    }
+
+    // Check for Pokémon images
+    if ($currentUser && $node->nodeName == 'img') {
+        $src = $node->getAttribute('src');
+        if (strpos($src, 'pokemondb.net') !== false) {
+            $users[$currentUser]['pokemons'][] = $src;
+            $users[$currentUser]['imageCount']++;
         }
     }
 }
