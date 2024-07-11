@@ -4,6 +4,7 @@ function getTeamsData($dir) {
     foreach (glob($dir . '/*.json') as $file) {
         $json = file_get_contents($file);
         $data = json_decode($json, true);
+        $data['members_count'] = count($data['members']); // Count the number of members
         $teams[] = $data;
     }
     return $teams;
@@ -54,6 +55,7 @@ $totalTeams = count($teams);
                     <th>Rank</th>
                     <th>Team Name</th>
                     <th>Total Shinies</th>
+                    <th>Members</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,6 +64,7 @@ $totalTeams = count($teams);
                         <td><?php echo $team['rank']; ?></td>
                         <td><a href="<?php echo htmlspecialchars($team['url']); ?>" target="_blank"><?php echo htmlspecialchars($team['name']); ?></a></td>
                         <td><?php echo $team['totalshinies']; ?></td>
+                        <td><?php echo $team['members_count']; ?></td> <!-- Display the number of members -->
                     </tr>
                 <?php endforeach; ?>
             </tbody>
