@@ -58,7 +58,7 @@ foreach ($possibleUsernameSpans as $possibleUsernameSpan) {
 foreach ($dom->getElementsByTagName('*') as $node) {
     // Check for username span
     if ($node->nodeName == 'span' && $node->getAttribute('style') == 'font-size:16px;') {
-        if (preg_match('/>([a-zA-Z]+)</', $dom->saveHTML($node), $usernameMatches)) {
+        if (preg_match($usernamePattern, $dom->saveHTML($node), $usernameMatches)) {
             $currentUser = trim($usernameMatches[1]);
             $users[$currentUser] = [
                 'imageCount' => 0,
