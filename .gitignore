@@ -1,9 +1,5 @@
-users/users.json
-teams/lgnd.json
-teams/pure.json
-teams/zomb.json
-teams/kpop.json
-teams/optic.json
-teams/goon.json
-teams/made.json
-teams/dove.json
+users/*
+!users/index.php
+
+teams/*
+!teams/index.php
