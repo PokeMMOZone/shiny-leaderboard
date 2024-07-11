@@ -3,3 +3,4 @@ users/*
 
 teams/*
 !teams/index.php
+!teams/mr.json
