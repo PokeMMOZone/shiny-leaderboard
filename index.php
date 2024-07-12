@@ -53,6 +53,7 @@ $totalTeams = count($teams);
             <thead>
                 <tr>
                     <th>Rank</th>
+                    <th>Team Tag</th>
                     <th>Team Name</th>
                     <th>Members</th>
                     <th>Total Shinies</th>
@@ -62,6 +63,7 @@ $totalTeams = count($teams);
                 <?php foreach ($rankedTeams as $team) : ?>
                     <tr>
                         <td><?php echo $team['rank']; ?></td>
+                        <td><?php echo htmlspecialchars($team['code']); ?></td>
                         <td><a href="<?php echo htmlspecialchars($team['url']); ?>" target="_blank"><?php echo htmlspecialchars($team['name']); ?></a></td>
                         <td><?php echo $team['members_count']; ?></td> <!-- Display the number of members -->
                         <td><?php echo $team['totalshinies']; ?></td>

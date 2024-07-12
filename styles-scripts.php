@@ -13,7 +13,7 @@
             "language": {
                 "info": "Displaying _TOTAL_ entries",
             },
-            "order": [[3, "desc"]],
+            "order": [[4, "desc"]],
             "autoWidth": false
         });
         $('#userLeaderboard').DataTable({
