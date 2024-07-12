@@ -13,7 +13,7 @@
             "language": {
                 "info": "Displaying _TOTAL_ entries",
             },
-            "order": [[2, "desc"]],
+            "order": [[3, "desc"]],
             "autoWidth": false
         });
     });
