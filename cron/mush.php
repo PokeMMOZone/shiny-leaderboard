@@ -55,8 +55,8 @@ function extractUserData($xpath) {
 function createJSONData($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
-        "name" => "Mushteamshroom",
-        "code" => "Mushteamshroom",
+        "name" => "Shroom",
+        "code" => "MÜSH",
         "url" => $url,
         "totalshinies" => $totalShinies,
         "members" => []
