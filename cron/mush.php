@@ -34,9 +34,21 @@ function extractUserData($xpath) {
         foreach ($spans as $span) {
             if ($span->getAttribute('style') === 'font-size:20px;') {
                 $username = preg_replace('/^\s+|\s+$/u', '', $span->textContent);
-            }
-            if ($span->getAttribute('style') === 'font-size:9px;') {
+            } elseif ($span->getAttribute('style') === 'color:#e67e22;') {
+                $nestedUsername = preg_replace('/^\s+|\s+$/u', '', $span->textContent);
+                if (!empty($nestedUsername)) {
+                    $username = $nestedUsername;
+                }
+            } elseif ($span->getAttribute('style') === 'font-size:9px;') {
                 $imageCount = intval(trim($span->textContent, '()'));
+            }
+        }
+        
+        $aTags = $pTag->getElementsByTagName('a');
+        foreach ($aTags as $aTag) {
+            $aUsername = preg_replace('/^\s+|\s+$/u', '', $aTag->textContent);
+            if (!empty($aUsername)) {
+                $username = $aUsername;
             }
         }
         
