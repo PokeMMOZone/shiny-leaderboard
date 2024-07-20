@@ -33,7 +33,7 @@ function extractUserData($xpath) {
         
         foreach ($spans as $span) {
             if ($span->getAttribute('style') === 'font-size:20px;') {
-                $username = trim($span->textContent);
+                $username = preg_replace('/^\s+|\s+$/u', '', $span->textContent);
             }
             if ($span->getAttribute('style') === 'font-size:9px;') {
                 $imageCount = intval(trim($span->textContent, '()'));
@@ -41,6 +41,7 @@ function extractUserData($xpath) {
         }
         
         if ($username && $imageCount) {
+            $username = preg_replace('/^\s+|\s+$/u', '', $username);
             if (!isset($users[$username])) {
                 $users[$username] = [
                     'imageCount' => $imageCount
@@ -94,6 +95,7 @@ try {
     
     echo "<h1>Team Mushteamshroom OT Shiny Showcase</h1><ul>";
     foreach ($users as $username => $data) {
+        $username = preg_replace('/^\s+|\s+$/u', '', $username); // Extra trim to ensure no leading/trailing spaces
         echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
     }
     echo "</ul>";
