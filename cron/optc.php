@@ -35,9 +35,10 @@ $pTags = $xpath->query("//p");
 // Initialize arrays
 $users = [];
 
-// Regular expression patterns to match usernames and counts
+// Regular expression patterns to match usernames, shiny counts, and TOTAL OT counts
 $usernamePattern = '/@(\w+)/';
 $shinyCountPattern = '/<font color="#ffffff">(\d+)<\/font>/';
+$totalOtPattern = '/TOTAL OT:\s*(\d+)/';
 
 foreach ($pTags as $pTag) {
     $pContent = $dom->saveHTML($pTag);
@@ -46,18 +47,24 @@ foreach ($pTags as $pTag) {
     if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
         $currentUsername = trim($usernameMatches[1]); // Remove @
 
+        // Initialize user data if not already set
+        if (!isset($users[$currentUsername])) {
+            $users[$currentUsername] = [
+                'imageCount' => 0,
+                'totalOt' => 0
+            ];
+        }
+
         // Check if the <p> tag contains a shiny count
         if (preg_match($shinyCountPattern, $pContent, $shinyCountMatches)) {
             $imageCount = intval($shinyCountMatches[1]);
+            $users[$currentUsername]['imageCount'] += $imageCount;
+        }
 
-            if (!isset($users[$currentUsername])) {
-                $users[$currentUsername] = [
-                    'imageCount' => $imageCount
-                ];
-            } else {
-                // If user already exists, add the count (in case of multiple entries)
-                $users[$currentUsername]['imageCount'] += $imageCount;
-            }
+        // Check if the <p> tag contains a TOTAL OT count
+        if (preg_match($totalOtPattern, $pContent, $totalOtMatches)) {
+            $totalOtCount = intval($totalOtMatches[1]);
+            $users[$currentUsername]['totalOt'] = $totalOtCount;
         }
     }
 }
@@ -77,7 +84,8 @@ $jsonData = [
 foreach ($users as $username => $data) {
     $jsonData["members"][] = [
         "username" => $username,
-        "count" => $data['imageCount']
+        "count" => $data['imageCount'],
+        "totalOt" => $data['totalOt']
     ];
 }
 
@@ -97,7 +105,7 @@ file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 echo "<h1>Team OPTIC Shiny Showcase</h1>";
 echo "<ul>";
 foreach ($users as $username => $data) {
-    echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
+    echo "<li><strong>$username</strong>: {$data['imageCount']} shinies, TOTAL OT: {$data['totalOt']}</li>";
 }
 echo "</ul>";
 ?>
