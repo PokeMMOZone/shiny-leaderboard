@@ -1,6 +1,6 @@
 <?php
 // URL of the page to scrape
-$url = "https://forums.pokemmo.com/index.php?/topic/155763-team-ot-shiny-showcase/";
+$url = "https://forums.pokemmo.com/index.php?/topic/178896-air-shiny-showcase-ots/";
 
 // Initialize cURL session
 $ch = curl_init();
@@ -36,7 +36,7 @@ $pTags = $xpath->query("//p");
 $users = [];
 
 // Regular expression pattern to match usernames and counts
-$usernamePattern = '/([a-zA-Z0-9]+)\s\((\d+)\)/';
+$usernamePattern = '/([a-zA-Z]+)\s*\((\d+)\)/';
 
 // Loop through each <p> tag
 foreach ($pTags as $pTag) {
@@ -46,11 +46,6 @@ foreach ($pTags as $pTag) {
     if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
         $username = trim($usernameMatches[1]);
         $imageCount = intval($usernameMatches[2]);
-
-        // Exclude the username "Shinies"
-        if ($username === "Shinies") {
-            continue;
-        }
         
         if (!isset($users[$username])) {
             $users[$username] = [
@@ -65,8 +60,8 @@ $totalShinies = array_sum(array_column($users, 'imageCount'));
 
 // Prepare data for JSON file
 $jsonData = [
-    "name" => "GoldenrodMAFIA",
-    "code" => "made",
+    "name" => "AïR",
+    "code" => "AïR",
     "url" => $url,
     "totalshinies" => $totalShinies,
     "members" => []
@@ -88,11 +83,11 @@ if (!is_dir($dir)) {
 }
 
 // Write data to JSON file
-$file = "$dir/made.json";
+$file = "$dir/air.json";
 file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
 // Display the results
-echo "<h1>Team GolderodMAFIA OT Shiny Showcase</h1>";
+echo "<h1>Team AIR OT Shiny Showcase</h1>";
 echo "<ul>";
 foreach ($users as $username => $data) {
     echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";

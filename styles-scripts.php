@@ -5,7 +5,18 @@
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#leaderboard, #userLeaderboard').DataTable({
+        $('#leaderboard').DataTable({
+            "paging": false,
+            "responsive": true,
+            "searching": true,
+            "info": true,
+            "language": {
+                "info": "Displaying _TOTAL_ entries",
+            },
+            "order": [[4, "desc"]],
+            "autoWidth": false
+        });
+        $('#userLeaderboard').DataTable({
             "paging": false,
             "responsive": true,
             "searching": true,

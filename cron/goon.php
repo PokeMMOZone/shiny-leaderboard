@@ -29,36 +29,34 @@ libxml_clear_errors();
 // Create a new XPath object
 $xpath = new DOMXPath($dom);
 
-// Find all <p> tags
+// Find all <p> tags with text content matching the pattern
 $pTags = $xpath->query("//p");
 
 // Initialize arrays
 $users = [];
 
-// Regular expression patterns to match usernames and counts
-$usernamePattern = '/@(\w+)/';
-$shinyCountPattern = '/- (\d+)/';
+// Regular expression pattern to match usernames and counts
+$usernamePattern = '/^\s*@?([\w\-\(\)\s]+)\s*[-–—]+\s*(\d+)\s*$/u';
 
 foreach ($pTags as $pTag) {
-    $pContent = $dom->saveHTML($pTag);
+    $pContent = trim($pTag->textContent);
 
-    // Check if the <p> tag contains a username
-    if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
-        $currentUsername = trim($usernameMatches[1]); // Remove @
+    // Check if the <p> tag contains a username and shiny count
+    if (preg_match($usernamePattern, $pContent, $matches)) {
+        $username = trim($matches[1]);
+        $shinyCount = intval($matches[2]);
 
-        // Check if the <p> tag contains a shiny count
-        if (preg_match($shinyCountPattern, $pContent, $shinyCountMatches)) {
-            $shinyCount = intval($shinyCountMatches[1]);
-
-            if (!isset($users[$currentUsername])) {
-                $users[$currentUsername] = [
-                    'shinyCount' => $shinyCount
-                ];
-            } else {
-                // If user already exists, add the count (in case of multiple entries)
-                $users[$currentUsername]['shinyCount'] += $shinyCount;
-            }
+        if (!isset($users[$username])) {
+            $users[$username] = [
+                'shinyCount' => $shinyCount
+            ];
+        } else {
+            // If user already exists, add the count (in case of multiple entries)
+            $users[$username]['shinyCount'] += $shinyCount;
         }
+    } else {
+        // Debug output for unmatched <p> tag content
+        echo "Unmatched: $pContent\n";
     }
 }
 
