@@ -26,22 +26,16 @@ function extractUserData($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
 
-    // Adjusted regex to capture the username and shiny count in this context
-    $usernamePattern = '/<strong>(.*?)<\/strong>.*?\((\d+)\)/';
-
     foreach ($pTags as $pTag) {
-        $pContent = $pTag->ownerDocument->saveHTML($pTag);
+        $content = trim($pTag->textContent);
+        if (preg_match('/^(.*?)\s*\((\d+)\)$/', $content, $matches)) {
+            $username = trim($matches[1]);
+            $imageCount = intval($matches[2]);
 
-        if (preg_match_all($usernamePattern, $pContent, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-                $username = trim($match[1]);
-                $imageCount = intval($match[2]);
-                
-                if (!isset($users[$username])) {
-                    $users[$username] = [
-                        'imageCount' => $imageCount
-                    ];
-                }
+            if (!empty($username) && !isset($users[$username])) {
+                $users[$username] = [
+                    'imageCount' => $imageCount
+                ];
             }
         }
     }
