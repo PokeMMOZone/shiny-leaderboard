@@ -13,26 +13,15 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
-    $dom = new DOMDocument();
-    libxml_use_internal_errors(true);
-    $dom->loadHTML($html);
-    libxml_clear_errors();
-    
-    return new DOMXPath($dom);
-}
-
-function extractUserData($xpath) {
-    $pTags = $xpath->query("//u");
+function extractUserData($html) {
     $users = [];
-    $usernamePattern = '/(\w+)\s*-\s*\((\d+)\)/';
+    // A simple regex to find names followed by a count in parentheses
+    $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\)/';
     
-    foreach ($pTags as $pTag) {
-        $pContent = $pTag->textContent;
-        
-        if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
-            $username = trim($usernameMatches[1]);
-            $imageCount = intval($usernameMatches[2]);
+    if (preg_match_all($usernamePattern, $html, $matches, PREG_SET_ORDER)) {
+        foreach ($matches as $match) {
+            $username = trim($match[1]);
+            $imageCount = intval($match[2]);
             
             if (!isset($users[$username])) {
                 $users[$username] = [
@@ -48,8 +37,8 @@ function extractUserData($xpath) {
 function createJSONData($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
-        "name" => "Pory",
-        "code" => "Pory",
+        "name" => "TeamRisingPH",
+        "code" => "RSNG",
         "url" => $url,
         "totalshinies" => $totalShinies,
         "members" => []
@@ -78,14 +67,13 @@ function saveJSONFile($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/159659-pory-ot-shiny-showcase/";
+    $url = "https://forums.pokemmo.com/index.php?/clubs/page/179-shiny-database/";
     $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
+    $users = extractUserData($html);
     $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/pory.json');
+    saveJSONFile($jsonData, __DIR__ . '/../teams/rsng.json');
     
-    echo "<h1>Team Pory OT Shiny Database</h1><ul>";
+    echo "<h1>Team Rising PH Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {
         echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
     }

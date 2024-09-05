@@ -23,18 +23,16 @@ function parseHTML($html) {
 }
 
 function extractUserData($xpath) {
-    $pTags = $xpath->query("//u");
+    $pTags = $xpath->query("//p");
     $users = [];
-    $usernamePattern = '/(\w+)\s*-\s*\((\d+)\)/';
-    
+
     foreach ($pTags as $pTag) {
-        $pContent = $pTag->textContent;
-        
-        if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
-            $username = trim($usernameMatches[1]);
-            $imageCount = intval($usernameMatches[2]);
-            
-            if (!isset($users[$username])) {
+        $content = trim($pTag->textContent);
+        if (preg_match('/^(.*?)\s*\((\d+)\)$/', $content, $matches)) {
+            $username = trim($matches[1]);
+            $imageCount = intval($matches[2]);
+
+            if (!empty($username) && !isset($users[$username])) {
                 $users[$username] = [
                     'imageCount' => $imageCount
                 ];
@@ -48,8 +46,8 @@ function extractUserData($xpath) {
 function createJSONData($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
-        "name" => "Pory",
-        "code" => "Pory",
+        "name" => "Boop",
+        "code" => "Boop",
         "url" => $url,
         "totalshinies" => $totalShinies,
         "members" => []
@@ -78,14 +76,14 @@ function saveJSONFile($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/159659-pory-ot-shiny-showcase/";
+    $url = "https://forums.pokemmo.com/index.php?/clubs/page/183-shiny-showcase/";
     $html = fetchWebpage($url);
     $xpath = parseHTML($html);
     $users = extractUserData($xpath);
     $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/pory.json');
+    saveJSONFile($jsonData, __DIR__ . '/../teams/boop.json');
     
-    echo "<h1>Team Pory OT Shiny Database</h1><ul>";
+    echo "<h1>Team Boop Shiny Showcase</h1><ul>";
     foreach ($users as $username => $data) {
         echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
     }

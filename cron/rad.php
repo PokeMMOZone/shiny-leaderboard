@@ -23,12 +23,13 @@ function parseHTML($html) {
 }
 
 function extractUserData($xpath) {
-    $pTags = $xpath->query("//u");
+    // Adjusted regex to match the username and shiny count
+    $pTags = $xpath->query("//p");
     $users = [];
-    $usernamePattern = '/(\w+)\s*-\s*\((\d+)\)/';
-    
+    $usernamePattern = '/<strong>([a-zA-Z0-9_]+)\s*\((\d+)\)<\/strong>/';
+
     foreach ($pTags as $pTag) {
-        $pContent = $pTag->textContent;
+        $pContent = $pTag->C14N();
         
         if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
             $username = trim($usernameMatches[1]);
@@ -48,8 +49,8 @@ function extractUserData($xpath) {
 function createJSONData($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
-        "name" => "Pory",
-        "code" => "Pory",
+        "name" => "Radiance",
+        "code" => "Räd",
         "url" => $url,
         "totalshinies" => $totalShinies,
         "members" => []
@@ -78,14 +79,14 @@ function saveJSONFile($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/159659-pory-ot-shiny-showcase/";
+    $url = "https://forums.pokemmo.com/index.php?/topic/176373-r%C3%A4d-shiny-show-case/";
     $html = fetchWebpage($url);
     $xpath = parseHTML($html);
     $users = extractUserData($xpath);
     $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/pory.json');
+    saveJSONFile($jsonData, __DIR__ . '/../teams/rad.json');
     
-    echo "<h1>Team Pory OT Shiny Database</h1><ul>";
+    echo "<h1>Radiance Shiny Show Case</h1><ul>";
     foreach ($users as $username => $data) {
         echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
     }
