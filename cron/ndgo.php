@@ -34,10 +34,13 @@ $dom->loadHTML($response);
 libxml_clear_errors();
 
 // Get the entire HTML content as a string
+$xpath = new DOMXPath($dom);
 $htmlContent = $dom->saveHTML();
 
 // Regular expression pattern to match usernames and counts
 $usernamePattern = '/>([A-Za-z0-9]+):\s*\((\d+)\)</';
+// $separatedUsernamePattern = '/<p style="text-align:center;">\\s*<strong><span style="color:rgb\\(168,104,192\\);">Krahla:&nbsp;<\\/span><\\/strong><span style="color:rgb\\(168,104,192\\);"><strong>\\(24\\)<\\/strong><\\/span>\\s*<\\/p>/';
+
 
 // Initialize arrays
 $users = [];
@@ -56,6 +59,36 @@ if (preg_match_all($usernamePattern, $htmlContent, $matches, PREG_SET_ORDER)) {
         }
     }
 }
+
+
+$possibleUsernameElements = $xpath->query("//p[@style='text-align:center;']");
+
+// Iterate through the found p elements to extract usernames and counts
+foreach ($possibleUsernameElements as $p) {
+    // Get the first strong element for the username
+    $usernameStrong = $xpath->query("./strong/span", $p)->item(0);
+    // Get the second strong element for the count
+    $countStrong = $xpath->query("./span/strong", $p)->item(0); 
+
+    if ($usernameStrong && $countStrong) {
+        // Extract username and count
+        $username = trim($usernameStrong->textContent);
+        $countText = trim($countStrong->textContent);
+
+        // Remove the trailing colon from the username
+        $username = rtrim($username, ':');
+        // Get the count as an integer
+        $imageCount = intval(trim($countText, '()'));
+
+        // Avoid duplication by ensuring unique usernames
+        if (!isset($users[$username])) {
+            $users[$username] = [
+                'imageCount' => $imageCount
+            ];
+        }
+    }
+}
+
 
 // Calculate total shinies
 $totalShinies = array_sum(array_column($users, 'imageCount'));
