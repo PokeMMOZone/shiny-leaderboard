@@ -1,6 +1,6 @@
 <?php
 // URL of the page to scrape
-$url = "https://forums.pokemmo.com/index.php?/topic/177621-ndgo-shiny-museum/";
+$url = "https://forums.pokemmo.com/index.php?/topic/182103-xene-ot-shiny-showcase-%E2%99%A6/";
 
 // Initialize cURL session
 $ch = curl_init();
@@ -36,34 +36,38 @@ libxml_clear_errors();
 // Get the entire HTML content as a string
 $htmlContent = $dom->saveHTML();
 
-// Regular expression pattern to match usernames and counts
-$usernamePattern = '/>([A-Za-z0-9]+):\s*\((\d+)\)</';
-
-// Initialize arrays
+// Initialize the users array as an empty array
 $users = [];
 
 // Find all matches in the response
-if (preg_match_all($usernamePattern, $htmlContent, $matches, PREG_SET_ORDER)) {
-    foreach ($matches as $match) {
-        $username = trim($match[1]);
-        $imageCount = intval($match[2]);
+$usernamePattern = '/<[^>]*>@?([A-Za-z0-9_]+)\s*\((\d+)\):<\/[^>]*>/';
 
-        // Avoid duplication by ensuring unique usernames
-        if (!isset($users[$username])) {
-            $users[$username] = [
-                'imageCount' => $imageCount
-            ];
+
+
+
+// Extract the content within the div with the given ID
+if (preg_match_all($usernamePattern, $htmlContent, $matches, PREG_SET_ORDER)) {
+    // Find all matches in the p content
+        foreach ($matches as $match) {
+            $username = trim($match[1]);
+            $imageCount = intval($match[2]);
+
+            if (!isset($users[$username])) {
+                    $users[$username] = [
+                        'imageCount' => $imageCount
+                    ];
+            }
         }
-    }
 }
+
 
 // Calculate total shinies
 $totalShinies = array_sum(array_column($users, 'imageCount'));
 
 // Prepare data for JSON file
 $jsonData = [
-    "name" => "IndigoPlateau",
-    "code" => "NDGO",
+    "name" => "Xene",
+    "code" => "xene",
     "url" => $url,
     "totalshinies" => $totalShinies,
     "members" => []
@@ -85,14 +89,15 @@ if (!is_dir($dir)) {
 }
 
 // Write data to JSON file
-$file = "$dir/ndgo.json";
+$file = "$dir/xene.json";
 file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
 // Display the results
-echo "<h1>Team IndigoPlateau OT Shiny Museum</h1>";
+echo "<h1>Team Xene shiny Showcase</h1>";
 echo "<ul>";
 foreach ($users as $username => $data) {
     echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
 }
 echo "</ul>";
+echo "<h1>Total Shinies: {$totalShinies}</h1>";
 ?>
