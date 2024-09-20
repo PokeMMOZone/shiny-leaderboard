@@ -117,4 +117,6 @@ foreach ($users as $username => $data) {
 }
 echo "</ul>";
 echo "<h1>Total Shinies: {$totalShinies}</h1>";
+
 ?>
+
