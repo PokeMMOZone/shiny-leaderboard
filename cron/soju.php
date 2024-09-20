@@ -1,6 +1,6 @@
 <?php
 // URL of the page to scrape
-$url = "https://www.pokemmotools.net/showcase";
+$url = "https://forums.pokemmo.com/index.php?/topic/181636-🍾✨-team-sojü-shiny-showcase-✨🍾/";
 
 // Initialize cURL session
 $ch = curl_init();
@@ -36,45 +36,27 @@ libxml_clear_errors();
 // Get the entire HTML content as a string
 $htmlContent = $dom->saveHTML();
 
-// Regular expression pattern to match usernames and counts
-
-$targetDivId = 'hidden-user-data';
-
 // Initialize the users array as an empty array
-$users = array();
+$users = [];
 
 // Find all matches in the response
-$usernamePattern = '/<div[^>]*id="' . $targetDivId . '[^>]*>(.*?)<\/div>/s';
+$usernamePattern = '/@([A-Za-z0-9_]+)\s*\((\d+)\)/';
+
+
 
 // Extract the content within the div with the given ID
-if (preg_match($usernamePattern, $htmlContent, $divMatch)) {
-    $divContent = $divMatch[1]; // Content inside the div
-
-    // Regular expression to match usernames and counts in the <p> tags
-    $pTagPattern = '/<p[^>]*>([A-Za-z0-9]+)\s*\((\d+)\)<\/p>/';
-
-    // Initialize arrays
-    $users = [];
-
-    // Find all matches in the div content
-    if (preg_match_all($pTagPattern, $divContent, $matches, PREG_SET_ORDER)) {
+if (preg_match_all($usernamePattern, $htmlContent, $matches, PREG_SET_ORDER)) {
+    // Find all matches in the p content
         foreach ($matches as $match) {
             $username = trim($match[1]);
             $imageCount = intval($match[2]);
-            if ($username !== 'u00a0' && preg_match('/^[A-Za-z0-9]+$/', $username) && $imageCount > 0) {
-                if ($username[0] === 't' && isset($users[substr($username, 1)])) {
-                    continue;
-                }
 
-                // Avoid duplication by ensuring unique usernames
-                if (!isset($users[$username])) {
+            if (!isset($users[$username])) {
                     $users[$username] = [
                         'imageCount' => $imageCount
                     ];
-                }
             }
         }
-    }
 }
 
 
@@ -83,8 +65,8 @@ $totalShinies = array_sum(array_column($users, 'imageCount'));
 
 // Prepare data for JSON file
 $jsonData = [
-    "name" => "Thug",
-    "code" => "Thug",
+    "name" => "SOJÜ",
+    "code" => "SOJÜ",
     "url" => $url,
     "totalshinies" => $totalShinies,
     "members" => []
@@ -106,17 +88,15 @@ if (!is_dir($dir)) {
 }
 
 // Write data to JSON file
-$file = "$dir/thug.json";
+$file = "$dir/soju.json";
 file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
 // Display the results
-echo "<h1>Team thug OT Shiny Showcase</h1>";
+echo "<h1>Team SOJU shiny Showcase</h1>";
 echo "<ul>";
 foreach ($users as $username => $data) {
     echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
 }
 echo "</ul>";
 echo "<h1>Total Shinies: {$totalShinies}</h1>";
-
 ?>
-
