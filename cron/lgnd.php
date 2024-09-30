@@ -13,7 +13,13 @@ $excludedUsers = [
     'MyParentsFight',
     'leSnifferofShins',
     'bigboycharizard',
-    'JacobRothschild'
+    'JacobRothschild',
+    'TrainerMurn',
+    'ReyadElric',
+    'papitime',
+    'Zerabot',
+    'Tikksie',
+    'Jujz'
 ];
 
 // Initialize cURL session
