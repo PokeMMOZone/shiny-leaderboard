@@ -42,7 +42,7 @@ function extractUserData($xpath) {
 
                 $members[] = [
                     'username' => $username,
-                    'shinies' => $shinyCount
+                    'count' => $shinyCount
                 ];
             }
         }
@@ -51,13 +51,14 @@ function extractUserData($xpath) {
 }
 
 // Function to create JSON data
-function createJSONData($members, $teamName, $teamCode) {
-    $totalShinies = array_sum(array_column($members, 'shinies'));
+function createJSONData($members, $teamName, $teamCode, $url) {
+    $totalShinies = array_sum(array_column($members, 'count'));
 
     return [
-        "team_name" => $teamName,
-        "team_code" => $teamCode,
-        "total_shinies" => $totalShinies,
+        "name" => $teamName,
+        "code" => $teamCode,
+        "url" => $url,
+        "totalshinies" => $totalShinies,
         "members" => $members
     ];
 }
@@ -90,7 +91,7 @@ try {
     $members = extractUserData($xpath);
     
     // Create JSON data
-    $jsonData = createJSONData($members, $teamName, $teamCode);
+    $jsonData = createJSONData($members, $teamName, $teamCode, $url);
     
     // Define the output file path
     $filePath = __DIR__ . '/../teams/xmas.json';

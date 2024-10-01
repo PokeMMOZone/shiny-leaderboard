@@ -53,7 +53,7 @@ function createJSONData($users, $url) {
         "name" => "PokéMafia",
         "code" => "PkéM",
         "url" => $url,
-        "totalShinies" => $totalShinies,
+        "totalshinies" => $totalShinies,
         "members" => []
     ];
 
