@@ -6,7 +6,7 @@ $url = "https://forums.pokemmo.com/index.php?/topic/159105-team-lgnds-ot-shiny-b
 $excludedUsers = [
     'xlirate',  // Add usernames you want to exclude here
     'MrGunn',
-    'sadcuzbad',
+    'SadcuzBad',
     'Gibmister',
     'TrustMeXD',
     'Prepizza',
@@ -19,7 +19,8 @@ $excludedUsers = [
     'papitime',
     'Zerabot',
     'Tikksie',
-    'Jujz'
+    'Jujz',
+    'thedynamight'
 ];
 
 // Initialize cURL session
