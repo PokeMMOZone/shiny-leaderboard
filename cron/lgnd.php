@@ -1,6 +1,6 @@
 <?php
 // URL of the page to scrape
-$url = "https://forums.pokemmo.com/index.php?/topic/159105-team-lgnds-ot-shiny-board/";
+$url = "https://forums.pokemmo.com/index.php?/topic/182823-team%C2%A0legends-ot-shiny-board/";
 
 // List of usernames to exclude
 $excludedUsers = [
@@ -20,7 +20,8 @@ $excludedUsers = [
     'Zerabot',
     'Tikksie',
     'Jujz',
-    'thedynamight'
+    'thedynamight',
+    'chippyeater'
 ];
 
 // Initialize cURL session
