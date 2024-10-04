@@ -27,8 +27,8 @@ function parseHTML($html) {
 // Function to extract usernames and shiny counts
 function extractUserData($xpath) {
     $members = [];
-    // Regex pattern to capture usernames with more complex Unicode characters followed by shiny counts in parentheses
-    $pattern = '/([A-Za-z0-9_\p{L}\p{M}]+)\((\d+)\)/u';  // \p{L} allows Unicode letters, \p{M} allows marks (accents)
+    // Regex pattern to capture usernames with Unicode characters followed by shiny counts in the format ★「count」★
+    $pattern = '/([A-Za-z0-9_\p{L}\p{M}]+)\s*★「(\d+)」★/u';  // Updated pattern to match the new format
 
     // Querying all <p> elements as they seem to contain the relevant data
     $nodes = $xpath->query('//p');
@@ -51,6 +51,7 @@ function extractUserData($xpath) {
     }
     return $members;
 }
+
 
 // Function to create JSON data
 function createJSONData($members, $teamName, $teamCode, $url) {
@@ -104,7 +105,7 @@ try {
     // Output the result in an HTML list format
     echo "<h1>{$teamName} ({$teamCode})</h1><ul>";
     foreach ($members as $member) {
-        echo "<li><strong>{$member['username']}</strong>: {$member['shinies']} shinies</li>";
+        echo "<li><strong>{$member['username']}</strong>: {$member['count']} shinies</li>";
     }
     echo "</ul>";
 } catch (Exception $e) {
