@@ -21,7 +21,8 @@ $excludedUsers = [
     'Tikksie',
     'Jujz',
     'thedynamight',
-    'chippyeater'
+    'chippyeater',
+    'LongConSIlver'
 ];
 
 // Initialize cURL session
