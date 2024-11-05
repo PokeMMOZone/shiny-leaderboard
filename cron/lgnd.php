@@ -23,7 +23,8 @@ $excludedUsers = [
     'thedynamight',
     'chippyeater',
     'LongConSIlver',
-    'OKAYLOL'
+    'OKAYLOL',
+    'fringoss'
 ];
 
 // Initialize cURL session
