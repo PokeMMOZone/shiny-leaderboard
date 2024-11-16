@@ -103,7 +103,7 @@ try {
     $xpath = parseHTML($html);
     $users = extractUserData($xpath);
     $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/mushteamshroom.json');
+    saveJSONFile($jsonData, __DIR__ . '/../teams/mush.json');
     
     echo "<h1>Team Mushteamshroom OT Shiny Showcase</h1><ul>";
     foreach ($users as $username => $data) {
