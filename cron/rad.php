@@ -79,7 +79,7 @@ function saveJSONFile($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/176373-r%C3%A4d-shiny-show-case/";
+    $url = "https://forums.pokemmo.com/index.php?/topic/176373-r%C3%A4d-shiny-showcase/";
     $html = fetchWebpage($url);
     $xpath = parseHTML($html);
     $users = extractUserData($xpath);
