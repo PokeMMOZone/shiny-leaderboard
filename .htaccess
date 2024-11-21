@@ -1,0 +1,24 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^\.git - [F,L]
+</IfModule>
+
+# Deny access to README.md
+<Files "README.md">
+    Require all denied
+</Files>
+
+# Deny access to config.php
+<Files "config.php">
+    Require all denied
+</Files>
+
+# Deny access to .gitignore
+<Files ".gitignore">
+    Require all denied
+</Files>
+
+# Deny access to LICENSE
+<Files "LICENSE">
+    Require all denied
+</Files>
