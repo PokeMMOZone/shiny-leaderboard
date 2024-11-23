@@ -51,8 +51,6 @@ foreach ($files as $file) {
     } catch (Throwable $e) {
         echo "Error including $file: " . $e->getMessage() . "\n";
     }
-    ob_flush();
-    flush();
 }
 
 echo "All files have been executed.\n";
