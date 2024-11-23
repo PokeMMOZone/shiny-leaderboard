@@ -33,7 +33,7 @@
         </div>
         <div class="faq-item">
             <h2>How often are the leaderboards updated?</h2>
-            <p>The shiny counts are updated on a daily basis from publicly available information on PokeMMO. Teams often have a shiny showcase, and the data is scraped from there.</p>
+            <p>The shiny counts are updated every hour from publicly available information on the PokeMMO forums. Teams often have a shiny showcase, and the data is scraped from there.</p>
         </div>
         <div class="faq-item">
             <h2>Can the ranking be done by other metrics, like rares for example?</h2>
