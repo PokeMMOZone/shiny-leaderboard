@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_rsng($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function extractUserData($html) {
+function extractUserData_rsng($html) {
     $users = [];
     // A simple regex to find names followed by a count in parentheses
     $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\)/';
@@ -34,7 +34,7 @@ function extractUserData($html) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_rsng($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "TeamRisingPH",
@@ -54,7 +54,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_rsng($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -68,10 +68,10 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/clubs/page/179-shiny-database/";
-    $html = fetchWebpage($url);
-    $users = extractUserData($html);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/rsng.json');
+    $html = fetchWebpage_rsng($url);
+    $users = extractUserData_rsng($html);
+    $jsonData = createJSONData_rsng($users, $url);
+    saveJSONFile_rsng($jsonData, __DIR__ . '/../teams/rsng.json');
     
     echo "<h1>Team Rising PH Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {

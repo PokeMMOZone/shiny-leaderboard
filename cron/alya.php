@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_alya($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_alya($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_alya($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
     $usernamePattern = '/([a-zA-ZÀ-ÖØ-öø-ÿ0-9_]+)\s*\((\d+)\):/'; // Adjusted for special characters like accents
@@ -45,7 +45,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_alya($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "ALETHEIA",
@@ -65,7 +65,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_alya($data, $filePath) {
     $dir = dirname($filePath);
 
     if (!is_dir($dir)) {
@@ -79,11 +79,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/clubs/page/221-shiny-showcase/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/alya.json');
+    $html = fetchWebpage_alya($url);
+    $xpath = parseHTML_alya($html);
+    $users = extractUserData_alya($xpath);
+    $jsonData = createJSONData_alya($users, $url);
+    saveJSONFile_alya($jsonData, __DIR__ . '/../teams/alya.json');
 
     echo "<h1>ALETHEIA OT Shiny Showcase</h1><ul>";
     foreach ($users as $username => $data) {

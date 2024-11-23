@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_uxie($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_uxie($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_uxie($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
     $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\)/';
@@ -45,7 +45,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_uxie($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "Uxie",
@@ -65,7 +65,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_uxie($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -79,11 +79,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/topic/183928-team-uxie-shiny-showcase/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/uxie.json');
+    $html = fetchWebpage_uxie($url);
+    $xpath = parseHTML_uxie($html);
+    $users = extractUserData_uxie($xpath);
+    $jsonData = createJSONData_uxie($users, $url);
+    saveJSONFile_uxie($jsonData, __DIR__ . '/../teams/uxie.json');
     
     echo "<h1>Team Uxie Shiny Showcase</h1><ul>";
     foreach ($users as $username => $data) {

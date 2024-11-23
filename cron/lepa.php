@@ -1,6 +1,6 @@
 <?php
 // Function to fetch the webpage content
-function fetchWebpage($url)
+function fetchWebpage_lepa($url)
 {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -16,7 +16,7 @@ function fetchWebpage($url)
 }
 
 // Function to parse the HTML
-function parseHTML($html)
+function parseHTML_lepa($html)
 {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
@@ -27,7 +27,7 @@ function parseHTML($html)
 }
 
 // Function to extract usernames and shiny counts
-function extractUserData($xpath)
+function extractUserData_lepa($xpath)
 {
     $members = [];
     $nodes = $xpath->query('//p/strong');
@@ -53,7 +53,7 @@ function extractUserData($xpath)
 }
 
 // Function to create JSON data
-function createJSONData($members, $teamName, $teamCode, $url)
+function createJSONData_lepa($members, $teamName, $teamCode, $url)
 {
     $totalShinies = array_sum(array_column($members, 'count'));
 
@@ -67,7 +67,7 @@ function createJSONData($members, $teamName, $teamCode, $url)
 }
 
 // Function to save JSON data to a file
-function saveJSONFile($data, $filePath)
+function saveJSONFile_lepa($data, $filePath)
 {
     $dir = dirname($filePath);
 
@@ -88,20 +88,20 @@ try {
     $teamCode = 'LEPA';
 
     // Fetch webpage content
-    $html = fetchWebpage($url);
+    $html = fetchWebpage_lepa($url);
 
     // Parse HTML and extract user data
-    $xpath = parseHTML($html);
-    $members = extractUserData($xpath);
+    $xpath = parseHTML_lepa($html);
+    $members = extractUserData_lepa($xpath);
 
     // Create JSON data
-    $jsonData = createJSONData($members, $teamName, $teamCode, $url);
+    $jsonData = createJSONData_lepa($members, $teamName, $teamCode, $url);
 
     // Define the output file path
     $filePath = __DIR__ . '/../teams/lepa.json';
 
     // Save the JSON data to a file
-    saveJSONFile($jsonData, $filePath);
+    saveJSONFile_lepa($jsonData, $filePath);
 
     // Output the result in an HTML list format
     echo "<h1>{$teamName} ({$teamCode})</h1><ul>";

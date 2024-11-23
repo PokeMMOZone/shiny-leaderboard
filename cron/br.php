@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_br($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_br($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_br($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
     
@@ -47,7 +47,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_br($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "TeamBrilliant",
@@ -67,7 +67,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_br($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -81,11 +81,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/clubs/page/204-gem-cave%E2%84%A2/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/br.json');
+    $html = fetchWebpage_br($url);
+    $xpath = parseHTML_br($html);
+    $users = extractUserData_br($xpath);
+    $jsonData = createJSONData_br($users, $url);
+    saveJSONFile_br($jsonData, __DIR__ . '/../teams/br.json');
     
     echo "<h1>Team Brilliant OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {

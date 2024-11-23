@@ -1,6 +1,6 @@
 <?php
 // Function to fetch the webpage content
-function fetchWebpage($url) {
+function fetchWebpage_eon($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -15,7 +15,7 @@ function fetchWebpage($url) {
 }
 
 // Function to parse the HTML
-function parseHTML($html) {
+function parseHTML_eon($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -25,7 +25,7 @@ function parseHTML($html) {
 }
 
 // Function to extract usernames and shiny counts
-function extractUserData($xpath) {
+function extractUserData_eon($xpath) {
     $members = [];
     // Regex pattern to capture usernames with Unicode characters followed by shiny counts in the format ★「count」★
     $pattern = '/([A-Za-z0-9_\p{L}\p{M}]+)\s*★「(\d+)」★/u';  // Updated pattern to match the new format
@@ -54,7 +54,7 @@ function extractUserData($xpath) {
 
 
 // Function to create JSON data
-function createJSONData($members, $teamName, $teamCode, $url) {
+function createJSONData_eon($members, $teamName, $teamCode, $url) {
     $totalShinies = array_sum(array_column($members, 'count'));
 
     return [
@@ -67,7 +67,7 @@ function createJSONData($members, $teamName, $teamCode, $url) {
 }
 
 // Function to save JSON data to a file
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_eon($data, $filePath) {
     $dir = dirname($filePath);
     
     // Create directory if it doesn't exist
@@ -87,20 +87,20 @@ try {
     $teamCode = 'EØN';
     
     // Fetch webpage content
-    $html = fetchWebpage($url);
+    $html = fetchWebpage_eon($url);
     
     // Parse HTML and extract user data
-    $xpath = parseHTML($html);
-    $members = extractUserData($xpath);
+    $xpath = parseHTML_eon($html);
+    $members = extractUserData_eon($xpath);
     
     // Create JSON data
-    $jsonData = createJSONData($members, $teamName, $teamCode, $url);
+    $jsonData = createJSONData_eon($members, $teamName, $teamCode, $url);
     
     // Define the output file path
     $filePath = __DIR__ . '/../teams/eon.json';
     
     // Save the JSON data to a file
-    saveJSONFile($jsonData, $filePath);
+    saveJSONFile_eon($jsonData, $filePath);
     
     // Output the result in an HTML list format
     echo "<h1>{$teamName} ({$teamCode})</h1><ul>";

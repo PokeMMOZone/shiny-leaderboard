@@ -1,6 +1,6 @@
 <?php
 // Function to fetch the webpage content
-function fetchWebpage($url) {
+function fetchWebpage_xmas($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -15,7 +15,7 @@ function fetchWebpage($url) {
 }
 
 // Function to parse the HTML
-function parseHTML($html) {
+function parseHTML_xmas($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -25,7 +25,7 @@ function parseHTML($html) {
 }
 
 // Function to extract usernames and shiny counts
-function extractUserData($xpath) {
+function extractUserData_xmas($xpath) {
     $members = [];
     // Updated regex pattern to handle usernames with or without shiny counts
     $pattern = '/@([A-Za-z0-9_]+)\s?(?:\((\d+)\))?/u';
@@ -51,7 +51,7 @@ function extractUserData($xpath) {
 }
 
 // Function to create JSON data
-function createJSONData($members, $teamName, $teamCode, $url) {
+function createJSONData_xmas($members, $teamName, $teamCode, $url) {
     $totalShinies = array_sum(array_column($members, 'count'));
 
     return [
@@ -64,7 +64,7 @@ function createJSONData($members, $teamName, $teamCode, $url) {
 }
 
 // Function to save JSON data to a file
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_xmas($data, $filePath) {
     $dir = dirname($filePath);
     
     // Create directory if it doesn't exist
@@ -84,25 +84,25 @@ try {
     $teamCode = 'Xmas';
     
     // Fetch webpage content
-    $html = fetchWebpage($url);
+    $html = fetchWebpage_xmas($url);
     
     // Parse HTML and extract user data
-    $xpath = parseHTML($html);
-    $members = extractUserData($xpath);
+    $xpath = parseHTML_xmas($html);
+    $members = extractUserData_xmas($xpath);
     
     // Create JSON data
-    $jsonData = createJSONData($members, $teamName, $teamCode, $url);
+    $jsonData = createJSONData_xmas($members, $teamName, $teamCode, $url);
     
     // Define the output file path
     $filePath = __DIR__ . '/../teams/xmas.json';
     
     // Save the JSON data to a file
-    saveJSONFile($jsonData, $filePath);
+    saveJSONFile_xmas($jsonData, $filePath);
     
     // Output the result in an HTML list format
     echo "<h1>{$teamName} ({$teamCode})</h1><ul>";
     foreach ($members as $member) {
-        echo "<li><strong>{$member['username']}</strong>: {$member['shinies']} shinies</li>";
+        echo "<li><strong>{$member['username']}</strong>: {$member['count']} shinies</li>";
     }
     echo "</ul>";
 } catch (Exception $e) {

@@ -1,6 +1,6 @@
 <?php
 // Function to fetch the webpage content
-function fetchWebpage($url) {
+function fetchWebpage_crow($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -15,7 +15,7 @@ function fetchWebpage($url) {
 }
 
 // Function to parse the HTML
-function parseHTML($html) {
+function parseHTML_crow($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -25,7 +25,7 @@ function parseHTML($html) {
 }
 
 // Function to extract usernames and shiny counts
-function extractUserData($xpath) {
+function extractUserData_crow($xpath) {
     $members = [];
     $pattern = '/(?:@([A-Za-z0-9_]+)|([A-Za-z0-9]+))[^⭐]*⭐\s*x\s*(\d+)/u';
 
@@ -54,7 +54,7 @@ function extractUserData($xpath) {
 }
 
 // Function to create JSON data
-function createJSONData($members, $teamName, $teamCode, $url) {
+function createJSONData_crow($members, $teamName, $teamCode, $url) {
     $totalShinies = array_sum(array_column($members, 'count'));
 
     return [
@@ -67,7 +67,7 @@ function createJSONData($members, $teamName, $teamCode, $url) {
 }
 
 // Function to save JSON data to a file
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_crow($data, $filePath) {
     $dir = dirname($filePath);
     
     // Create directory if it doesn't exist
@@ -87,25 +87,25 @@ try {
     $teamCode = 'Crøw';
     
     // Fetch webpage content
-    $html = fetchWebpage($url);
+    $html = fetchWebpage_crow($url);
     
     // Parse HTML and extract user data
-    $xpath = parseHTML($html);
-    $members = extractUserData($xpath);
+    $xpath = parseHTML_crow($html);
+    $members = extractUserData_crow($xpath);
     
     // Create JSON data
-    $jsonData = createJSONData($members, $teamName, $teamCode, $url);
+    $jsonData = createJSONData_crow($members, $teamName, $teamCode, $url);
     
     // Define the output file path
     $filePath = __DIR__ . '/../teams/crow.json';
     
     // Save the JSON data to a file
-    saveJSONFile($jsonData, $filePath);
+    saveJSONFile_crow($jsonData, $filePath);
     
     // Output the result in an HTML list format
     echo "<h1>{$teamName} ({$teamCode})</h1><ul>";
     foreach ($members as $member) {
-        echo "<li><strong>{$member['username']}</strong>: {$member['shinies']} shinies</li>";
+        echo "<li><strong>{$member['username']}</strong>: {$member['count']} shinies</li>";
     }
     echo "</ul>";
 } catch (Exception $e) {

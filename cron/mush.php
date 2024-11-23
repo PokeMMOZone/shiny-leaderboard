@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_mush($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_mush($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_mush($xpath) {
     $pTags = $xpath->query("//p[@style='text-align:center;']");
     $users = [];
     
@@ -65,7 +65,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_mush($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "Shroom",
@@ -85,7 +85,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_mush($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -99,11 +99,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/topic/176522-m%C3%BCshteamshroom-ot-shiny-showcase/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/mush.json');
+    $html = fetchWebpage_mush($url);
+    $xpath = parseHTML_mush($html);
+    $users = extractUserData_mush($xpath);
+    $jsonData = createJSONData_mush($users, $url);
+    saveJSONFile_mush($jsonData, __DIR__ . '/../teams/mush.json');
     
     echo "<h1>Team Mushteamshroom OT Shiny Showcase</h1><ul>";
     foreach ($users as $username => $data) {

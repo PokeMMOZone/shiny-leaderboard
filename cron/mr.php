@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_mr($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_mr($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_mr($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
     $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\):/';
@@ -45,7 +45,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_mr($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "Mr",
@@ -65,7 +65,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_mr($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -79,11 +79,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/topic/182307-team-mr-ot-shiny-database/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/mr.json');
+    $html = fetchWebpage_mr($url);
+    $xpath = parseHTML_mr($html);
+    $users = extractUserData_mr($xpath);
+    $jsonData = createJSONData_mr($users, $url);
+    saveJSONFile_mr($jsonData, __DIR__ . '/../teams/mr.json');
     
     echo "<h1>Team MR OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {

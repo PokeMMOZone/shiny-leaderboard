@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_roo($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_roo($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_roo($xpath) {
     $userNodes = $xpath->query("//p[contains(@style, 'text-align:center;')]//a[@data-mentionid]");
     $countNodes = $xpath->query("//p[contains(@style, 'text-align:center;')]/strong[contains(text(), 'Total Count')]");
 
@@ -40,7 +40,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_roo($users, $url) {
     $totalShinies = array_sum(array_column($users, 'totalCount'));
     $jsonData = [
         "name" => "ROO",
@@ -60,7 +60,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_roo($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -74,11 +74,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/topic/177613-roo-shiny-showcase/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/roo.json');
+    $html = fetchWebpage_roo($url);
+    $xpath = parseHTML_roo($html);
+    $users = extractUserData_roo($xpath);
+    $jsonData = createJSONData_roo($users, $url);
+    saveJSONFile_roo($jsonData, __DIR__ . '/../teams/roo.json');
     
     echo "<h1>Team Roo OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {

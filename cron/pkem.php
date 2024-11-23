@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_pkem($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_pkem($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_pkem($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
     
@@ -47,7 +47,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_pkem($users, $url) {
     $totalShinies = array_sum(array_column($users, 'shinyCount'));
     $jsonData = [
         "name" => "PokéMafia",
@@ -67,7 +67,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_pkem($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -81,11 +81,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/topic/180683-pok%C3%A9mafia-pk%C3%A9m-team-ot-shiny-showcase/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/pkem.json');
+    $html = fetchWebpage_pkem($url);
+    $xpath = parseHTML_pkem($html);
+    $users = extractUserData_pkem($xpath);
+    $jsonData = createJSONData_pkem($users, $url);
+    saveJSONFile_pkem($jsonData, __DIR__ . '/../teams/pkem.json');
     
     echo "<h1>PokéMafia OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {

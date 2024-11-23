@@ -45,5 +45,5 @@ $usersFile = "$usersDir/users.json";
 file_put_contents($usersFile, json_encode($usersData, JSON_PRETTY_PRINT));
 
 // Display a message indicating success
-echo "Users data successfully written to $usersFile";
+echo "Users data successfully written to $usersFile\n";
 ?>

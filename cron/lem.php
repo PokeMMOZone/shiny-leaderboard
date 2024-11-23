@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_lem($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_lem($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_lem($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
     
@@ -65,7 +65,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_lem($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "SimplyLëmonadë",
@@ -85,7 +85,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_lem($data, $filePath) {
     $dir = dirname($filePath);
 
     if (!is_dir($dir)) {
@@ -99,11 +99,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/topic/181849-l%C3%ABm-shiny-showcase/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/lem.json');
+    $html = fetchWebpage_lem($url);
+    $xpath = parseHTML_lem($html);
+    $users = extractUserData_lem($xpath);
+    $jsonData = createJSONData_lem($users, $url);
+    saveJSONFile_lem($jsonData, __DIR__ . '/../teams/lem.json');
 
     echo "<h1>SimplyLëmonadë OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {
