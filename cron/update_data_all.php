@@ -40,6 +40,7 @@ $files = [
     'pkem.php',
     'krkn.php',
     'alya.php',
+    'lgnd.php',
     'generate-users.php'
 ];
 
