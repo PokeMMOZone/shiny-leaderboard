@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage_uxie($url) {
+function fetchWebpage_br($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage_uxie($url) {
     return $response;
 }
 
-function parseHTML_uxie($html) {
+function parseHTML_br($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,9 +22,11 @@ function parseHTML_uxie($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData_uxie($xpath) {
+function extractUserData_br($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
+    
+    // Adjusted regex to account for names with styles and counts in parentheses
     $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\)/';
     
     foreach ($pTags as $pTag) {
@@ -45,11 +47,11 @@ function extractUserData_uxie($xpath) {
     return $users;
 }
 
-function createJSONData_uxie($users, $url) {
+function createJSONData_br($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
-        "name" => "Uxie",
-        "code" => "Uxie",
+        "name" => "TeamBrilliant",
+        "code" => "ßr",
         "url" => $url,
         "totalshinies" => $totalShinies,
         "members" => []
@@ -65,7 +67,7 @@ function createJSONData_uxie($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile_uxie($data, $filePath) {
+function saveJSONFile_br($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -78,14 +80,14 @@ function saveJSONFile_uxie($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/183928-team-uxie-shiny-showcase/";
-    $html = fetchWebpage_uxie($url);
-    $xpath = parseHTML_uxie($html);
-    $users = extractUserData_uxie($xpath);
-    $jsonData = createJSONData_uxie($users, $url);
-    saveJSONFile_uxie($jsonData, __DIR__ . '/../teams/uxie.json');
+    $url = "https://forums.pokemmo.com/index.php?/clubs/page/204-gem-cave%E2%84%A2/";
+    $html = fetchWebpage_br($url);
+    $xpath = parseHTML_br($html);
+    $users = extractUserData_br($xpath);
+    $jsonData = createJSONData_br($users, $url);
+    saveJSONFile_br($jsonData, __DIR__ . '/../teams/br.json');
     
-    echo "<h1>Team Uxie Shiny Showcase</h1><ul>";
+    echo "<h1>Team Brilliant OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {
         echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
     }

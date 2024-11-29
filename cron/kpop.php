@@ -8,6 +8,7 @@ $ch = curl_init();
 // Set the URL and other necessary options
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
 // Execute the request
 $response = curl_exec($ch);
@@ -35,42 +36,35 @@ $pTags = $xpath->query("//p");
 // Initialize arrays
 $users = [];
 
-// Regular expression pattern to match usernames and counts
-$usernamePattern = '/@(\w+)/';
-$shinyCountPattern = '/OT Shiny Count:\s*(\d+)/';
-
-$currentUsername = null;
+// Regular expression patterns
+$nameAndCountPattern = '/([\w]+)\s*\((\d+)\)/';
 
 // Loop through each <p> tag
 foreach ($pTags as $pTag) {
-    $pContent = $dom->saveHTML($pTag);
-    
-    // Check if the <p> tag contains a username
-    if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
-        $currentUsername = trim($usernameMatches[1]); // Remove @
-    }
-    
-    // Check if the <p> tag contains a shiny count
-    if (preg_match($shinyCountPattern, $pContent, $shinyCountMatches) && $currentUsername !== null) {
-        $imageCount = intval($shinyCountMatches[1]);
-        
-        if (!isset($users[$currentUsername])) {
-            $users[$currentUsername] = [
-                'imageCount' => $imageCount
+    // Extract and clean text from the <p> tag
+    $pContent = strip_tags($dom->saveHTML($pTag));
+    $pContent = html_entity_decode($pContent, ENT_QUOTES | ENT_HTML5);
+
+    // Check for name and shiny count in cleaned text
+    if (preg_match($nameAndCountPattern, $pContent, $matches)) {
+        $name = trim($matches[1]); // Extract name
+        $shinyCount = intval($matches[2]); // Extract shiny count
+
+        if (!isset($users[$name])) {
+            $users[$name] = [
+                'shinyCount' => $shinyCount
             ];
         } else {
-            // If user already exists, add the count (in case of multiple entries)
-            $users[$currentUsername]['imageCount'] += $imageCount;
+            // Add to existing count
+            $users[$name]['shinyCount'] += $shinyCount;
         }
-
-        $currentUsername = null; // Reset current username after processing
     }
 }
 
 // Calculate total shinies
-$totalShinies = array_sum(array_column($users, 'imageCount'));
+$totalShinies = array_sum(array_column($users, 'shinyCount'));
 
-// Prepare data for JSON file
+// Prepare data for JSON
 $jsonData = [
     "name" => "KPOP",
     "code" => "KPOP",
@@ -79,10 +73,10 @@ $jsonData = [
     "members" => []
 ];
 
-foreach ($users as $username => $data) {
+foreach ($users as $name => $data) {
     $jsonData["members"][] = [
-        "username" => $username,
-        "count" => $data['imageCount']
+        "username" => $name,
+        "count" => $data['shinyCount']
     ];
 }
 
@@ -98,11 +92,11 @@ if (!is_dir($dir)) {
 $file = "$dir/kpop.json";
 file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
-// Display the results
+// Display results
 echo "<h1>Team KPOP OT Shiny Showcase</h1>";
 echo "<ul>";
-foreach ($users as $username => $data) {
-    echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
+foreach ($users as $name => $data) {
+    echo "<li><strong>$name</strong>: {$data['shinyCount']} shinies</li>";
 }
 echo "</ul>";
 ?>

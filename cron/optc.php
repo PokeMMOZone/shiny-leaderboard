@@ -20,40 +20,26 @@ if ($response === false) {
     die("Failed to fetch the webpage.");
 }
 
-// Load the HTML response into a DOMDocument
-$dom = new DOMDocument();
-libxml_use_internal_errors(true); // Suppress HTML parsing errors
-$dom->loadHTML($response);
-libxml_clear_errors();
+// Search entire HTML content using a regular expression to capture username and shiny count
+// Updated regex pattern to allow for any content between the username and shiny count
+$usernamePattern = '/<strong>\s*([^<]+?)\s*-\s*(\d+)\s*(?:<br\s*\/?>|<\/span>)?\s*<\/strong>/i';
 
-// Create a new XPath object
-$xpath = new DOMXPath($dom);
-
-// Find all <p> tags
-$pTags = $xpath->query("//p");
-
-// Initialize arrays
+// Initialize arrays to hold the parsed user data
 $users = [];
 
-// Regular expression patterns to match usernames and counts
-$usernamePattern = '/@(\w+)/';
-$OTShinyPattern = '/TOTAL OT:\s*(\d+)/';
-foreach ($pTags as $pTag) {
-    $pContent = $dom->saveHTML($pTag);
-    // Check if the <p> tag contains a username
-    if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
-        $currentUsername = trim($usernameMatches[1]); // Remove @
-        // Check if the <p> tag contains an OT shiny count
-        if (preg_match($OTShinyPattern, $pContent, $OTShinyMatches)) {
-            $OTShinyCount = intval($OTShinyMatches[1]);
-        }
+// Match all occurrences of the pattern in the response
+if (preg_match_all($usernamePattern, $response, $matches, PREG_SET_ORDER)) {
+    foreach ($matches as $match) {
+        $currentUsername = trim($match[1]);
+        $OTShinyCount = intval($match[2]);
 
+        // Add the user and their shiny count to the $users array
         if (!isset($users[$currentUsername])) {
             $users[$currentUsername] = [
                 'OTShinyCount' => $OTShinyCount
             ];
         } else {
-            // If user already exists, add the counts (in case of multiple entries)
+            // If the user already exists, add the counts (in case of multiple entries)
             $users[$currentUsername]['OTShinyCount'] += $OTShinyCount;
         }
     }
@@ -87,7 +73,7 @@ if (!is_dir($dir)) {
 }
 
 // Write data to JSON file
-$file = "$dir/optic.json";
+$file = "$dir/optc.json";  // Updated output file name
 file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
 // Display the results

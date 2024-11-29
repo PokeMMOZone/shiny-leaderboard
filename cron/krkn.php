@@ -1,6 +1,11 @@
 <?php
 // URL of the page to scrape
-$url = "https://forums.pokemmo.com/index.php?/topic/178896-a%C3%AFr-shiny-showcase-ots/";
+$url = "https://forums.pokemmo.com/index.php?/topic/183268-team-kraken-shiny-showcase/";
+
+// List of usernames to exclude
+$excludedUsers = [
+    ''  // Add usernames you want to exclude here
+];
 
 // Initialize cURL session
 $ch = curl_init();
@@ -29,28 +34,31 @@ libxml_clear_errors();
 // Create a new XPath object
 $xpath = new DOMXPath($dom);
 
-// Find all <p> tags
-$pTags = $xpath->query("//p");
+// Find all div and p tags
+$tags = $xpath->query("//div | //p");
 
 // Initialize arrays
 $users = [];
 
 // Regular expression pattern to match usernames and counts
-$usernamePattern = '/([a-zA-Z]+)\s*\((\d+)\)/';
+$usernamePattern = '/([a-zA-Z0-9]+)\s*\((\d+)\)/';
 
-// Loop through each <p> tag
-foreach ($pTags as $pTag) {
-    $pContent = $dom->saveHTML($pTag);
+// Loop through each tag
+foreach ($tags as $tag) {
+    $tagContent = $dom->saveHTML($tag);
     
-    // Check if the <p> tag contains a username
-    if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
+    // Check if the tag contains a username
+    if (preg_match($usernamePattern, $tagContent, $usernameMatches)) {
         $username = trim($usernameMatches[1]);
         $imageCount = intval($usernameMatches[2]);
         
-        if (!isset($users[$username])) {
-            $users[$username] = [
-                'imageCount' => $imageCount
-            ];
+        // Exclude usernames in the exclusion list
+        if (!in_array($username, $excludedUsers)) {
+            if (!isset($users[$username])) {
+                $users[$username] = [
+                    'imageCount' => $imageCount
+                ];
+            }
         }
     }
 }
@@ -60,8 +68,8 @@ $totalShinies = array_sum(array_column($users, 'imageCount'));
 
 // Prepare data for JSON file
 $jsonData = [
-    "name" => "AïR",
-    "code" => "AïR",
+    "name" => "Kraken",
+    "code" => "KRKN",
     "url" => $url,
     "totalshinies" => $totalShinies,
     "members" => []
@@ -83,11 +91,11 @@ if (!is_dir($dir)) {
 }
 
 // Write data to JSON file
-$file = "$dir/air.json";
+$file = "$dir/krkn.json";
 file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
 // Display the results
-echo "<h1>Team AIR OT Shiny Showcase</h1>";
+echo "<h1>Team Kraken OT Shiny Board</h1>";
 echo "<ul>";
 foreach ($users as $username => $data) {
     echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";

@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_naa($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_naa($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_naa($xpath) {
     $users = [];
     $usernamePatterns = [
         '/([a-zA-Z0-9_]+)(?:\s*-\s*[a-zA-Z]+\s*)?\((\d+)\)/', // Format 1: "Username - Rank (count)"
@@ -51,7 +51,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_naa($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "NoApesAllowed",
@@ -71,7 +71,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_naa($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -85,11 +85,11 @@ function saveJSONFile($data, $filePath) {
 
 try {
     $url = "https://forums.pokemmo.com/index.php?/topic/180706-team-naa-no-apes-allowed-shiny-showcase/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/naa.json');
+    $html = fetchWebpage_naa($url);
+    $xpath = parseHTML_naa($html);
+    $users = extractUserData_naa($xpath);
+    $jsonData = createJSONData_naa($users, $url);
+    saveJSONFile_naa($jsonData, __DIR__ . '/../teams/naa.json');
     
     echo "<h1>Team NoApesAllowed OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {

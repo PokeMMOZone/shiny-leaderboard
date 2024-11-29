@@ -1,6 +1,13 @@
 <?php
+
 // URL of the page to scrape
-$url = "https://forums.pokemmo.com/index.php?/topic/159105-team-lgnds-ot-shiny-board/";
+$url = "https://forums.pokemmo.com/index.php?/topic/184581-team-legends-ot-shiny-board/";
+
+// List of usernames to exclude
+$excludedUsers = [
+    ''  // Add usernames you want to exclude here
+
+];
 
 // Initialize cURL session
 $ch = curl_init();
@@ -47,10 +54,13 @@ foreach ($tags as $tag) {
         $username = trim($usernameMatches[1]);
         $imageCount = intval($usernameMatches[2]);
         
-        if (!isset($users[$username])) {
-            $users[$username] = [
-                'imageCount' => $imageCount
-            ];
+        // Exclude usernames in the exclusion list
+        if (!in_array($username, $excludedUsers)) {
+            if (!isset($users[$username])) {
+                $users[$username] = [
+                    'imageCount' => $imageCount
+                ];
+            }
         }
     }
 }

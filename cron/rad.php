@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage($url) {
+function fetchWebpage_rad($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage($url) {
     return $response;
 }
 
-function parseHTML($html) {
+function parseHTML_rad($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,7 +22,7 @@ function parseHTML($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData($xpath) {
+function extractUserData_rad($xpath) {
     // Adjusted regex to match the username and shiny count
     $pTags = $xpath->query("//p");
     $users = [];
@@ -46,7 +46,7 @@ function extractUserData($xpath) {
     return $users;
 }
 
-function createJSONData($users, $url) {
+function createJSONData_rad($users, $url) {
     $totalShinies = array_sum(array_column($users, 'imageCount'));
     $jsonData = [
         "name" => "Radiance",
@@ -66,7 +66,7 @@ function createJSONData($users, $url) {
     return $jsonData;
 }
 
-function saveJSONFile($data, $filePath) {
+function saveJSONFile_rad($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -79,12 +79,12 @@ function saveJSONFile($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/176373-r%C3%A4d-shiny-show-case/";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/rad.json');
+    $url = "https://forums.pokemmo.com/index.php?/topic/176373-r%C3%A4d-shiny-showcase/";
+    $html = fetchWebpage_rad($url);
+    $xpath = parseHTML_rad($html);
+    $users = extractUserData_rad($xpath);
+    $jsonData = createJSONData_rad($users, $url);
+    saveJSONFile_rad($jsonData, __DIR__ . '/../teams/rad.json');
     
     echo "<h1>Radiance Shiny Show Case</h1><ul>";
     foreach ($users as $username => $data) {

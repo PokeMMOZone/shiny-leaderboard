@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage_uxie($url) {
+function fetchWebpage_pkem($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -13,7 +13,7 @@ function fetchWebpage_uxie($url) {
     return $response;
 }
 
-function parseHTML_uxie($html) {
+function parseHTML_pkem($html) {
     $dom = new DOMDocument();
     libxml_use_internal_errors(true);
     $dom->loadHTML($html);
@@ -22,50 +22,52 @@ function parseHTML_uxie($html) {
     return new DOMXPath($dom);
 }
 
-function extractUserData_uxie($xpath) {
+function extractUserData_pkem($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
-    $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\)/';
     
+    // Adjusted pattern for 'username (count)' format
+    $usernamePattern = '/([a-zA-Z0-9]+)\s*\((\d+)\)/';
+
     foreach ($pTags as $pTag) {
         $pContent = $pTag->textContent;
-        
+
         if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
             $username = trim($usernameMatches[1]);
-            $imageCount = intval($usernameMatches[2]);
-            
+            $shinyCount = intval($usernameMatches[2]);
+
             if (!isset($users[$username])) {
                 $users[$username] = [
-                    'imageCount' => $imageCount
+                    'shinyCount' => $shinyCount
                 ];
             }
         }
     }
-    
+
     return $users;
 }
 
-function createJSONData_uxie($users, $url) {
-    $totalShinies = array_sum(array_column($users, 'imageCount'));
+function createJSONData_pkem($users, $url) {
+    $totalShinies = array_sum(array_column($users, 'shinyCount'));
     $jsonData = [
-        "name" => "Uxie",
-        "code" => "Uxie",
+        "name" => "PokéMafia",
+        "code" => "PkéM",
         "url" => $url,
         "totalshinies" => $totalShinies,
         "members" => []
     ];
-    
+
     foreach ($users as $username => $data) {
         $jsonData["members"][] = [
             "username" => $username,
-            "count" => $data['imageCount']
+            "count" => $data['shinyCount']
         ];
     }
-    
+
     return $jsonData;
 }
 
-function saveJSONFile_uxie($data, $filePath) {
+function saveJSONFile_pkem($data, $filePath) {
     $dir = dirname($filePath);
     
     if (!is_dir($dir)) {
@@ -78,16 +80,16 @@ function saveJSONFile_uxie($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/183928-team-uxie-shiny-showcase/";
-    $html = fetchWebpage_uxie($url);
-    $xpath = parseHTML_uxie($html);
-    $users = extractUserData_uxie($xpath);
-    $jsonData = createJSONData_uxie($users, $url);
-    saveJSONFile_uxie($jsonData, __DIR__ . '/../teams/uxie.json');
+    $url = "https://forums.pokemmo.com/index.php?/topic/180683-pok%C3%A9mafia-pk%C3%A9m-team-ot-shiny-showcase/";
+    $html = fetchWebpage_pkem($url);
+    $xpath = parseHTML_pkem($html);
+    $users = extractUserData_pkem($xpath);
+    $jsonData = createJSONData_pkem($users, $url);
+    saveJSONFile_pkem($jsonData, __DIR__ . '/../teams/pkem.json');
     
-    echo "<h1>Team Uxie Shiny Showcase</h1><ul>";
+    echo "<h1>PokéMafia OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {
-        echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
+        echo "<li><strong>$username</strong>: {$data['shinyCount']} shinies</li>";
     }
     echo "</ul>";
 } catch (Exception $e) {
