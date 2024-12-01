@@ -80,10 +80,10 @@ function saveJSONFile_mr($data, $filePath) {
 try {
 
     $url = "https://www.pokemmotools.net/mr";
-    $html = fetchWebpage($url);
-    $xpath = parseHTML($html);
-    $users = extractUserData($xpath);
-    $jsonData = createJSONData($users, $url);
+    $html = fetchWebpage_mr($url);
+    $xpath = parseHTML_mr($html);
+    $users = extractUserData_mr($xpath);
+    $jsonData = createJSONData_mr($users, $url);
     saveJSONFile($jsonData, __DIR__ . '/../teams/mr.json');
 
     
