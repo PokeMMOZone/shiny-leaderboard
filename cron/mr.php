@@ -84,7 +84,7 @@ try {
     $xpath = parseHTML_mr($html);
     $users = extractUserData_mr($xpath);
     $jsonData = createJSONData_mr($users, $url);
-    saveJSONFile($jsonData, __DIR__ . '/../teams/mr.json');
+    saveJSONFile_mr($jsonData, __DIR__ . '/../teams/mr.json');
 
     
     echo "<h1>Team MR OT Shiny Database</h1><ul>";
