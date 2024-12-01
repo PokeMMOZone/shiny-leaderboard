@@ -25,7 +25,7 @@ function parseHTML_mr($html) {
 function extractUserData_mr($xpath) {
     $pTags = $xpath->query("//p");
     $users = [];
-    $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\):/';
+    $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\)/';
     
     foreach ($pTags as $pTag) {
         $pContent = $pTag->textContent;
@@ -78,18 +78,21 @@ function saveJSONFile_mr($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/182307-team-mr-ot-shiny-database/";
-    $html = fetchWebpage_mr($url);
-    $xpath = parseHTML_mr($html);
-    $users = extractUserData_mr($xpath);
-    $jsonData = createJSONData_mr($users, $url);
-    saveJSONFile_mr($jsonData, __DIR__ . '/../teams/mr.json');
+
+    $url = "https://www.pokemmotools.net/mr";
+    $html = fetchWebpage($url);
+    $xpath = parseHTML($html);
+    $users = extractUserData($xpath);
+    $jsonData = createJSONData($users, $url);
+    saveJSONFile($jsonData, __DIR__ . '/../teams/mr.json');
+
     
     echo "<h1>Team MR OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {
         echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
+
     }
-    echo "</ul>";
+    echo "</ul><h1>Total Shinies: {$jsonData['totalshinies'] }</h1>";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
