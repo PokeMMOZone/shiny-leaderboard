@@ -78,7 +78,7 @@ function saveJSONFile_pory($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/159659-pory-ot-shiny-showcase/";
+    $url = "https://forums.pokemmo.com/index.php?/topic/184615-pory-ot-shiny-showcase/";
     $html = fetchWebpage_pory($url);
     $xpath = parseHTML_pory($html);
     $users = extractUserData_pory($xpath);
