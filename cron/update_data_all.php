@@ -10,7 +10,6 @@ $files = [
     'kpop.php',
     'optc.php',
     'pure.php',
-    'zomb.php',
     'goon.php',
     'made.php',
     'dove.php',
