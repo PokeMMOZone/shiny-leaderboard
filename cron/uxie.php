@@ -78,7 +78,7 @@ function saveJSONFile_uxie($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/183928-team-uxie-shiny-showcase/";
+    $url = "https://forums.pokemmo.com/index.php?/topic/180558-team-uxie-shiny-showcase/";
     $html = fetchWebpage_uxie($url);
     $xpath = parseHTML_uxie($html);
     $users = extractUserData_uxie($xpath);
