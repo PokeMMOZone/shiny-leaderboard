@@ -79,7 +79,7 @@ function saveJSONFile_rad($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/176373-r%C3%A4d-shiny-showcase/";
+    $url = "https://forums.pokemmo.com/index.php?/topic/185342-team-r%C3%A4diance-shiny-showcase/";
     $html = fetchWebpage_rad($url);
     $xpath = parseHTML_rad($html);
     $users = extractUserData_rad($xpath);
