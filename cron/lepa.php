@@ -30,16 +30,17 @@ function parseHTML_lepa($html)
 function extractUserData_lepa($xpath)
 {
     $members = [];
-    $nodes = $xpath->query('//p/strong');
+    // Query for all relevant `<span>` or `<strong>` elements containing user data
+    $nodes = $xpath->query('//span[strong] | //strong/span');
 
     foreach ($nodes as $node) {
         $text = trim($node->textContent);
 
-        // Remove specific titles
-        $text = str_replace([' - Leader', ' - Co-Leader'], '', $text);
+        // Remove specific titles like "Leader" or "Co-Leader" if present
+        $text = preg_replace('/ - (Leader|Co-Leader|Watcher|OtherRole)/i', '', $text);
 
-        // Extract username and shiny count
-        if (preg_match('/^([A-Za-z0-9 _-]+)\s*\((\d+)\)$/', $text, $matches)) {
+        // Extract username and shiny count using regex
+        if (preg_match('/^([\w\s\'-]+)\s*\((\d+)\)$/', $text, $matches)) {
             $username = trim($matches[1]);
             $shinyCount = intval($matches[2]);
 
