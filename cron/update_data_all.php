@@ -41,6 +41,7 @@ $files = [
     'alya.php',
     'lgnd.php',
     'exi.php',
+    'void.php',
     'generate-users.php'
 ];
 
