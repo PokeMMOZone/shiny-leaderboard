@@ -19,7 +19,6 @@ $files = [
     'air.php',
     'cfe.php',
     'fbas.php',
-    'uxie.php',
     'sia.php',
     'naa.php',
     'sabl.php',
