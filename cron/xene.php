@@ -66,8 +66,8 @@ $totalShinies = array_sum(array_column($users, 'imageCount'));
 
 // Prepare data for JSON file
 $jsonData = [
-    "name" => "Xene",
-    "code" => "xene",
+    "name" => "XeneCommunity",
+    "code" => "Xene",
     "url" => $url,
     "totalshinies" => $totalShinies,
     "members" => []
