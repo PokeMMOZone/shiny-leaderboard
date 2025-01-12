@@ -41,6 +41,7 @@ $files = [
     'lgnd.php',
     'exi.php',
     'void.php',
+    'uxie.php',
     'generate-users.php'
 ];
 
