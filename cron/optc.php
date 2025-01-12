@@ -4,15 +4,9 @@ $url = "https://forums.pokemmo.com/index.php?/topic/169239-optic-shiny-showcase/
 
 // Initialize cURL session
 $ch = curl_init();
-
-// Set the URL and other necessary options
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-// Execute the request
 $response = curl_exec($ch);
-
-// Close cURL session
 curl_close($ch);
 
 // Check if the response was successful
@@ -20,33 +14,37 @@ if ($response === false) {
     die("Failed to fetch the webpage.");
 }
 
-// Search entire HTML content using a regular expression to capture username and shiny count
-// Updated regex pattern to allow for any content between the username and shiny count
-$usernamePattern = '/<strong>\s*([^<]+?)\s*-\s*(\d+)\s*(?:<br\s*\/?>|<\/span>)?\s*<\/strong>/i';
+// Load the HTML into DOMDocument
+$dom = new DOMDocument();
+libxml_use_internal_errors(true); // Suppress parsing warnings
+$dom->loadHTML($response);
+libxml_clear_errors();
 
-// Initialize arrays to hold the parsed user data
+// Extract all <p> tags
+$paragraphs = $dom->getElementsByTagName('p');
+
+// Initialize arrays to hold parsed user data
 $users = [];
 
-// Match all occurrences of the pattern in the response
-if (preg_match_all($usernamePattern, $response, $matches, PREG_SET_ORDER)) {
-    foreach ($matches as $match) {
-        $currentUsername = trim($match[1]);
-        $OTShinyCount = intval($match[2]);
+// Iterate over paragraphs to find usernames and shiny counts
+foreach ($paragraphs as $paragraph) {
+    $text = trim($paragraph->textContent);
+    // Regex to match "Username - Count"
+    if (preg_match('/([\w\-]+)\s*-\s*(\d+)/i', $text, $matches)) {
+        $username = $matches[1];
+        $count = intval($matches[2]);
 
-        // Add the user and their shiny count to the $users array
-        if (!isset($users[$currentUsername])) {
-            $users[$currentUsername] = [
-                'OTShinyCount' => $OTShinyCount
-            ];
+        // Aggregate data
+        if (!isset($users[$username])) {
+            $users[$username] = $count;
         } else {
-            // If the user already exists, add the counts (in case of multiple entries)
-            $users[$currentUsername]['OTShinyCount'] += $OTShinyCount;
+            $users[$username] += $count;
         }
     }
 }
 
 // Calculate total shinies
-$totalShinies = array_sum(array_column($users, 'OTShinyCount'));
+$totalShinies = array_sum($users);
 
 // Prepare data for JSON file
 $jsonData = [
@@ -57,10 +55,10 @@ $jsonData = [
     "members" => []
 ];
 
-foreach ($users as $username => $data) {
+foreach ($users as $username => $count) {
     $jsonData["members"][] = [
         "username" => $username,
-        "count" => $data['OTShinyCount']
+        "count" => $count
     ];
 }
 
@@ -73,14 +71,14 @@ if (!is_dir($dir)) {
 }
 
 // Write data to JSON file
-$file = "$dir/optc.json";  // Updated output file name
+$file = "$dir/optc.json";
 file_put_contents($file, json_encode($jsonData, JSON_PRETTY_PRINT));
 
-// Display the results
+// Display results
 echo "<h1>Team OPTIC Shiny Showcase</h1>";
 echo "<ul>";
-foreach ($users as $username => $data) {
-    echo "<li><strong>$username</strong>: {$data['OTShinyCount']} shinies</li>";
+foreach ($users as $username => $count) {
+    echo "<li><strong>$username</strong>: $count shinies</li>";
 }
 echo "</ul>";
 ?>
