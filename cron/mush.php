@@ -98,7 +98,7 @@ function saveJSONFile_mush($data, $filePath) {
 }
 
 try {
-    $url = "https://forums.pokemmo.com/index.php?/topic/176522-m%C3%BCshteamshroom-ot-shiny-showcase/";
+    $url = "https://forums.pokemmo.com/index.php?/topic/186128-m%C3%BCshteamshroom-ot-shiny-showcase/";
     $html = fetchWebpage_mush($url);
     $xpath = parseHTML_mush($html);
     $users = extractUserData_mush($xpath);
