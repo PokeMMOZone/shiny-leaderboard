@@ -23,20 +23,23 @@ function parseHTML_roo($html) {
 }
 
 function extractUserData_roo($xpath) {
-    $userNodes = $xpath->query("//p[contains(@style, 'text-align:center;')]//a[@data-mentionid]");
-    $countNodes = $xpath->query("//p[contains(@style, 'text-align:center;')]/strong[contains(text(), 'Total Count')]");
+    $userNodes = $xpath->query("//p[contains(@style, 'text-align:center;')]//span[contains(@style, 'color:#7ba889;')]");
 
     $users = [];
 
-    for ($i = 0; $i < $userNodes->length; $i++) {
-        $username = ltrim($userNodes->item($i)->textContent, '@');
-        $totalCount = intval(preg_replace('/[^0-9]/', '', $countNodes->item($i)->textContent));
+    foreach ($userNodes as $node) {
+        // Extract the username and shiny count
+        $text = $node->textContent;
+        if (preg_match('/(.+?)\s\((\d+)\)/', $text, $matches)) {
+            $username = trim($matches[1]);
+            $shinyCount = intval($matches[2]);
 
-        $users[$username] = [
-            'totalCount' => $totalCount
-        ];
+            $users[$username] = [
+                'totalCount' => $shinyCount,
+            ];
+        }
     }
-    
+
     return $users;
 }
 
