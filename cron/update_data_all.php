@@ -13,7 +13,6 @@ $files = [
     'goon.php',
     'made.php',
     'dove.php',
-    'roo.php',
     'mr.php',
     'mush.php',
     'air.php',
