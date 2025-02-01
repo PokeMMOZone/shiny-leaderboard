@@ -1,5 +1,5 @@
 <?php
-function fetchWebpage_mr($url) {
+function fetchAPIData_mr($url) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -7,37 +7,23 @@ function fetchWebpage_mr($url) {
     curl_close($ch);
     
     if ($response === false) {
-        throw new Exception("Failed to fetch the webpage.");
+        throw new Exception("Failed to fetch the API data.");
     }
     
-    return $response;
+    return json_decode($response, true);
 }
 
-function parseHTML_mr($html) {
-    $dom = new DOMDocument();
-    libxml_use_internal_errors(true);
-    $dom->loadHTML($html);
-    libxml_clear_errors();
-    
-    return new DOMXPath($dom);
-}
-
-function extractUserData_mr($xpath) {
-    $pTags = $xpath->query("//p");
+function extractUserData_mr($apiData) {
     $users = [];
     $usernamePattern = '/([a-zA-Z0-9_]+)\s*\((\d+)\)/';
     
-    foreach ($pTags as $pTag) {
-        $pContent = $pTag->textContent;
-        
-        if (preg_match($usernamePattern, $pContent, $usernameMatches)) {
-            $username = trim($usernameMatches[1]);
-            $imageCount = intval($usernameMatches[2]);
+    foreach ($apiData as $entry) {
+        if (preg_match($usernamePattern, $entry, $matches)) {
+            $username = trim($matches[1]);
+            $imageCount = intval($matches[2]);
             
             if (!isset($users[$username])) {
-                $users[$username] = [
-                    'imageCount' => $imageCount
-                ];
+                $users[$username] = ['imageCount' => $imageCount];
             }
         }
     }
@@ -78,21 +64,17 @@ function saveJSONFile_mr($data, $filePath) {
 }
 
 try {
-
-    $url = "https://www.pokemmotools.net/mr";
-    $html = fetchWebpage_mr($url);
-    $xpath = parseHTML_mr($html);
-    $users = extractUserData_mr($xpath);
+    $url = "https://www.pokemmotools.net/api/mr";
+    $apiData = fetchAPIData_mr($url);
+    $users = extractUserData_mr($apiData);
     $jsonData = createJSONData_mr($users, $url);
     saveJSONFile_mr($jsonData, __DIR__ . '/../teams/mr.json');
-
     
     echo "<h1>Team MR OT Shiny Database</h1><ul>";
     foreach ($users as $username => $data) {
         echo "<li><strong>$username</strong>: {$data['imageCount']} shinies</li>";
-
     }
-    echo "</ul><h1>Total Shinies: {$jsonData['totalshinies'] }</h1>";
+    echo "</ul><h1>Total Shinies: {$jsonData['totalshinies']}</h1>";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
