@@ -1,6 +1,6 @@
 <?php
 // URL of the page to scrape
-$url = "https://forums.pokemmo.com/index.php?/topic/155763-team-ot-shiny-showcase/";
+$url = "https://forums.pokemmo.com/index.php?/topic/155763-made-goldenrod-mafia-ot-shiny-showcase/";
 
 // Initialize cURL session
 $ch = curl_init();
