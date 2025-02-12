@@ -36,7 +36,7 @@ function createJSONData_mr($users, $url) {
     $jsonData = [
         "name" => "Mr",
         "code" => "Mr",
-        "url" => $url,
+        "url" => "https://www.pokemmotools.net/mr", // Updated URL
         "totalshinies" => $totalShinies,
         "members" => []
     ];
