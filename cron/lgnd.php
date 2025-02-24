@@ -1,7 +1,7 @@
 <?php
 
 // URL of the page to scrape
-$url = "https://forums.pokemmo.com/index.php?/topic/184581-team-legends-ot-shiny-board/";
+$url = "https://forums.pokemmo.com/index.php?/topic/186989-team-lg%C3%B1d-ot-shiny-board/";
 
 // List of usernames to exclude
 $excludedUsers = [
