@@ -44,6 +44,9 @@ function extractUserData_exi($xpath) {
                     $username = str_replace(' - Leader', '', $username);
                 }
 
+                // Remove the specified string from usernames
+                $username = str_replace("</strong></span></span><span style=\"color:#f39c12;\"><span style=\"font-family:'Lucida Sans Unicode', 'Lucida Grande', sans-serif;\"><strong>", '', $username);
+
                 if (!isset($users[$username])) {
                     $users[$username] = [
                         'shinyCount' => $shinyCount
@@ -55,7 +58,6 @@ function extractUserData_exi($xpath) {
 
     return $users;
 }
-
 
 function createJSONData_exi($users, $url)
 {
