@@ -139,3 +139,17 @@ a:hover {
 .dataTables_wrapper .dataTables_filter input::placeholder {
     color: #bbbbbb; /* Lighter gray for placeholder text */
 }
+
+#flashing-message {
+    text-align: center;
+    padding: 10px;
+    background-color: rgb(46, 28, 151);
+    font-weight: bold;
+    animation: flash 10s infinite;
+}
+
+@keyframes flash {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
