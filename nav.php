@@ -10,16 +10,16 @@
 </nav>
 
 <div id="flashing-message">
-    <a href="https://pokemmo.zone/2025/03/shiny-board-teaser-screenshots/" target="_blank">Click here for info on the new website! We will not be adding any new teams to this website and all focus is going into releasing Shiny Board.</a>
+    <a href="https://shinyboard.pokemmo.zone/" target="_blank">Shiny Board has been released!</a>
 </div>
 
 <!-- Modal Dialog -->
 <div id="messageModal" class="modal">
     <div class="modal-content">
-        <p>We have opened up applications for beta testing of the new website. Beta testing will happen this weekend!</p>
-        <p>Click <a href="https://pokemmo.zone/2025/03/shiny-board-beta-applications/" target="_blank">here</a> for more information.</p>
-        <p>Teaser Screenshots: <a href="https://pokemmo.zone/2025/03/shiny-board-teaser-screenshots/" target="_blank">Link</a></p>
-        <p>We hope to release Shiny Board next week. This website will be going away by the end of the month!</p>
+        <p>Shiny Board has been released!</p>
+        <p>Click <a href="https://pokemmo.zone/?p=298" target="_blank">here</a> for more information.</p>
+        <p>Shiny Board: <a href="https://shinyboard.pokemmo.zone/" target="_blank">Link</a></p>
+        <p>Updates for this website has been reduced to once a day. This website will be going away by the end of the month!</p>
         <button id="closeModal">OK</button>
     </div>
 </div>
